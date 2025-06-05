@@ -3,9 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { UserPlus } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
-import Button from '../../components/ui/Button';
 
 // Form validation schema
 const signupSchema = z.object({
@@ -35,11 +33,11 @@ const SignupPage = () => {
   const navigate = useNavigate();
   const { signup, isLoading } = useAuth();
   const [authError, setAuthError] = useState<string | null>(null);
-  
-  const { 
-    register, 
-    handleSubmit, 
-    formState: { errors } 
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
   } = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -50,7 +48,7 @@ const SignupPage = () => {
       terms: false,
     },
   });
-  
+
   const onSubmit = async (data: SignupFormValues) => {
     try {
       setAuthError(null);
@@ -60,9 +58,9 @@ const SignupPage = () => {
       setAuthError('Signup failed. Please try again.');
     }
   };
-  
+
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-white py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md animate-fade-in animate-slide-up">
         <div className="rounded-lg bg-white p-8 shadow-lg">
           <div className="text-center">
@@ -73,106 +71,105 @@ const SignupPage = () => {
               Join the campus marketplace to buy, sell, and connect with other students.
             </p>
           </div>
-          
+
           {authError && (
             <div className="mb-4 rounded-md bg-red-50 p-4">
               <div className="text-sm text-red-700">{authError}</div>
             </div>
           )}
-          
+
           <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+            {/* Name */}
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                Full Name
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                Full Name <span className="text-red-500">*</span>
               </label>
               <input
                 id="name"
                 type="text"
                 autoComplete="name"
                 required
-                className={`mt-1 block w-full rounded-md shadow-sm focus:border-primary focus:ring-primary sm:text-sm ${
-                  errors.name ? 'border-red-500' : 'border-gray-300'
-                }`}
+                className={`mt-0 block w-full rounded-md bg-white text-gray-900 font-semibold shadow-sm border ${errors.name ? 'border-red-500' : 'border-gray-300'} focus:border-orange-700 focus:ring-orange-700 hover:border-orange-500 transition-all duration-200 sm:text-base px-4 py-3 placeholder-gray-400`}
+                placeholder="Full Name"
                 {...register('name')}
               />
               {errors.name && (
                 <p className="mt-1 text-xs text-red-600">{errors.name.message}</p>
               )}
             </div>
-            
+
+            {/* Email */}
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                College Email
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                College Email <span className="text-red-500">*</span>
               </label>
               <input
                 id="email"
                 type="email"
                 autoComplete="email"
                 required
-                className={`mt-1 block w-full rounded-md shadow-sm focus:border-primary focus:ring-primary sm:text-sm ${
-                  errors.email ? 'border-red-500' : 'border-gray-300'
-                }`}
+                className={`mt-0 block w-full rounded-md bg-white text-gray-900 font-semibold shadow-sm border ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:border-orange-700 focus:ring-orange-700 hover:border-orange-500 transition-all duration-200 sm:text-base px-4 py-3 placeholder-gray-400`}
+                placeholder="College Email"
                 {...register('email')}
               />
               {errors.email && (
                 <p className="mt-1 text-xs text-red-600">{errors.email.message}</p>
               )}
             </div>
-            
+
+            {/* Password */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                Password <span className="text-red-500">*</span>
               </label>
               <input
                 id="password"
                 type="password"
                 autoComplete="new-password"
                 required
-                className={`mt-1 block w-full rounded-md shadow-sm focus:border-primary focus:ring-primary sm:text-sm ${
-                  errors.password ? 'border-red-500' : 'border-gray-300'
-                }`}
+                className={`mt-0 block w-full rounded-md bg-white text-gray-900 font-semibold shadow-sm border ${errors.password ? 'border-red-500' : 'border-gray-300'} focus:border-orange-700 focus:ring-orange-700 hover:border-orange-500 transition-all duration-200 sm:text-base px-4 py-3 placeholder-gray-400`}
+                placeholder="Password"
                 {...register('password')}
               />
               {errors.password && (
                 <p className="mt-1 text-xs text-red-600">{errors.password.message}</p>
               )}
             </div>
-            
+
+            {/* Confirm Password */}
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                Confirm Password
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+                Confirm Password <span className="text-red-500">*</span>
               </label>
               <input
                 id="confirmPassword"
                 type="password"
                 autoComplete="new-password"
                 required
-                className={`mt-1 block w-full rounded-md shadow-sm focus:border-primary focus:ring-primary sm:text-sm ${
-                  errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
-                }`}
+                className={`mt-0 block w-full rounded-md bg-white text-gray-900 font-semibold shadow-sm border ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'} focus:border-orange-700 focus:ring-orange-700 hover:border-orange-500 transition-all duration-200 sm:text-base px-4 py-3 placeholder-gray-400`}
+                placeholder="Confirm Password"
                 {...register('confirmPassword')}
               />
               {errors.confirmPassword && (
                 <p className="mt-1 text-xs text-red-600">{errors.confirmPassword.message}</p>
               )}
             </div>
-            
-            <div className="flex items-center">
+
+            {/* Terms Checkbox */}
+            <div className="flex items-center group">
               <input
                 id="terms"
                 type="checkbox"
-                className={`h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary ${
-                  errors.terms ? 'border-red-500' : ''
-                }`}
-                {...register('terms')}
+                className={`h-4 w-4 rounded border-gray-300 text-blue-700 focus:ring-blue-700 transition-all duration-200 ease-in-out group-hover:border-blue-600 group-hover:bg-blue-100 ${errors.terms ? 'border-red-500' : ''}`}
+                {...register('terms', { required: true })}
               />
-              <label htmlFor="terms" className="ml-2 block text-sm text-gray-900">
+              <label htmlFor="terms" className="ml-2 block text-sm text-gray-900 select-none cursor-pointer transition-colors duration-200">
                 I agree to the{' '}
-                <Link to="#" className="font-medium text-primary hover:text-primary-dark">
+                <Link to="#" className="font-medium text-orange-700 hover:text-orange-800">
                   Terms of Service
                 </Link>{' '}
                 and{' '}
-                <Link to="#" className="font-medium text-primary hover:text-primary-dark">
+                <Link to="#" className="font-medium text-orange-700 hover:text-orange-800">
                   Privacy Policy
                 </Link>
               </label>
@@ -180,24 +177,27 @@ const SignupPage = () => {
             {errors.terms && (
               <p className="mt-1 text-xs text-red-600">{errors.terms.message}</p>
             )}
-            
+
+            {/* Submit Button */}
             <div>
-              <Button
+              <button
                 type="submit"
-                variant="primary"
-                className="w-full flex justify-center"
-                isLoading={isLoading}
+                className="w-full flex justify-center items-center bg-orange-700 hover:bg-orange-800 text-white font-bold px-8 py-3 rounded-full transition text-lg"
+                disabled={isLoading}
               >
-                {!isLoading && <UserPlus className="mr-2 h-4 w-4" />}
-                Create Account
-              </Button>
+                {isLoading ? (
+                  <span>Loading...</span>
+                ) : (
+                  "Create account"
+                )}
+              </button>
             </div>
           </form>
-          
+
           <div className="mt-6 text-center text-sm">
             <p className="text-gray-600">
               Already have an account?{' '}
-              <Link to="/login" className="font-medium text-primary hover:text-primary-dark">
+              <Link to="/login" className="font-medium text-primary text-orange-700 hover:underline hover:text-orange-900 transition">
                 Sign in
               </Link>
             </p>
