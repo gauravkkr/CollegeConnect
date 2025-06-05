@@ -1,46 +1,193 @@
 import { useAuth } from '../../hooks/useAuth';
-import { Link, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, Link } from 'react-router-dom';
 import Avatar from '../../components/ui/Avatar';
+import { User, MessageCircle, ShoppingBag, LogOut, Edit3 } from 'lucide-react';
+import { useListings } from '../../hooks/useListings';
+import { useEffect } from 'react';
+import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import Button from '../../components/ui/Button';
+
+const navLinks = [
+  { label: 'Dashboard', icon: User, to: '/dashboard' },
+  { label: 'Profile', icon: Edit3, to: '/profile' },
+  { label: 'Messages', icon: MessageCircle, to: '/messages' },
+  { label: 'My Listings', icon: ShoppingBag, to: '/listings' },
+  { label: 'Post Listing', icon: ShoppingBag, to: '/listings/create' },
+];
 
 const DashboardPage = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const { userListings, getUserListings, isLoading } = useListings();
+
+  useEffect(() => {
+    getUserListings();
+  }, [getUserListings]);
 
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
 
-  return (
-    <div className="container mx-auto px-4 py-10 max-w-3xl animate-fade-in">
-      <div className="mb-8 flex items-center gap-6 rounded-lg bg-white p-6 shadow-md">
-        <Avatar src={user?.profileImage} alt={user?.name} size="xl" />
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900">{user?.name}</h2>
-          <p className="text-gray-600">{user?.email}</p>
-          <Button onClick={handleLogout} variant="outline" className="mt-3">Logout</Button>
-        </div>
-      </div>
+  // Helper to prevent navigation if already on dashboard
+  const handleNavClick = (e: React.MouseEvent, to: string) => {
+    if (to === '/dashboard' && window.location.pathname === '/dashboard') {
+      e.preventDefault();
+    }
+  };
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <Link to="/profile" className="group rounded-lg border border-gray-200 bg-white p-6 shadow-md transition hover:border-primary hover:shadow-lg">
-          <h3 className="mb-2 text-lg font-semibold text-primary group-hover:underline">Edit Profile</h3>
-          <p className="text-gray-600">Update your personal information and profile picture.</p>
-        </Link>
-        <Link to="/listings/create" className="group rounded-lg border border-gray-200 bg-white p-6 shadow-md transition hover:border-primary hover:shadow-lg">
-          <h3 className="mb-2 text-lg font-semibold text-primary group-hover:underline">Post a Listing</h3>
-          <p className="text-gray-600">Sell books, electronics, or anything else to students.</p>
-        </Link>
-        <Link to="/messages" className="group rounded-lg border border-gray-200 bg-white p-6 shadow-md transition hover:border-primary hover:shadow-lg">
-          <h3 className="mb-2 text-lg font-semibold text-primary group-hover:underline">Messages</h3>
-          <p className="text-gray-600">View and reply to your conversations.</p>
-        </Link>
-        <Link to="/listings" className="group rounded-lg border border-gray-200 bg-white p-6 shadow-md transition hover:border-primary hover:shadow-lg">
-          <h3 className="mb-2 text-lg font-semibold text-primary group-hover:underline">My Listings</h3>
-          <p className="text-gray-600">Manage your active and past listings.</p>
-        </Link>
-      </div>
+  return (
+    <div className="min-h-screen bg-[#f6f8fa] flex">
+      {/* Sidebar */}
+      <aside className="hidden md:flex flex-col items-center gap-4 bg-white border-r border-gray-200 py-8 px-4 min-w-[90px] rounded-tr-3xl rounded-br-3xl shadow-md">
+        <Avatar src={user?.profileImage} alt={user?.name} size="md" className="mb-4" />
+        <nav className="flex flex-col gap-6 mt-8 w-full">
+          {navLinks.map(link => {
+            const Icon = link.icon;
+            return (
+              <NavLink
+                key={link.label}
+                to={link.to}
+                onClick={e => handleNavClick(e, link.to)}
+                className={({ isActive }) =>
+                  `group flex flex-col items-center py-2 rounded-xl transition cursor-pointer w-full
+                  ${isActive ? 'bg-primary/10 text-primary shadow font-semibold pointer-events-none opacity-60' : 'text-gray-400 hover:text-primary hover:bg-primary/5'} `
+                }
+                title={link.label}
+              >
+                <Icon className="h-7 w-7 mb-1 transition group-hover:scale-110" />
+                <span className="text-xs">{link.label}</span>
+              </NavLink>
+            );
+          })}
+        </nav>
+        <button onClick={handleLogout} className="mt-auto flex flex-col items-center text-destructive hover:text-destructive-dark transition py-2 w-full rounded-xl">
+          <LogOut className="h-7 w-7 mb-1" />
+          <span className="text-xs">Logout</span>
+        </button>
+      </aside>
+
+      {/* Main Content */}
+      <main className="flex-1 flex flex-col md:flex-row gap-8 p-6 md:p-12">
+        {/* Left: Welcome & Cards */}
+        <section className="flex-1">
+          <h1 className="text-4xl font-bold mb-6 text-gray-900">Welcome back, {user?.name?.split(' ')[0] || 'Student'}!</h1>
+          <div className="mb-10 flex flex-wrap gap-4">
+            <span className="inline-block rounded-full bg-primary/10 px-4 py-2 text-primary font-medium text-sm">Verified Student</span>
+            <span className="inline-block rounded-full bg-accent/10 px-4 py-2 text-accent font-medium text-sm">Active Seller</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Link to="/listings/create" className="rounded-2xl bg-[#fbeee6] p-6 shadow hover:shadow-lg transition group">
+              <div className="flex items-center gap-3 mb-2">
+                <ShoppingBag className="text-accent" />
+                <span className="font-semibold text-lg text-accent group-hover:underline">Post a Listing</span>
+              </div>
+              <p className="text-gray-600">Sell books, electronics, or anything else to students.</p>
+            </Link>
+            <Link to="/messages" className="rounded-2xl bg-[#e6f6fb] p-6 shadow hover:shadow-lg transition group">
+              <div className="flex items-center gap-3 mb-2">
+                <MessageCircle className="text-primary" />
+                <span className="font-semibold text-lg text-primary group-hover:underline">Messages</span>
+              </div>
+              <p className="text-gray-600">View and reply to your conversations.</p>
+            </Link>
+            <Link to="/listings" className="rounded-2xl bg-[#e6fbe9] p-6 shadow hover:shadow-lg transition group">
+              <div className="flex items-center gap-3 mb-2">
+                <ShoppingBag className="text-success" />
+                <span className="font-semibold text-lg text-success group-hover:underline">My Listings</span>
+              </div>
+              <p className="text-gray-600">Manage your active and past listings.</p>
+            </Link>
+            <Link to="/profile" className="rounded-2xl bg-[#f3e6fb] p-6 shadow hover:shadow-lg transition group">
+              <div className="flex items-center gap-3 mb-2">
+                <Edit3 className="text-secondary" />
+                <span className="font-semibold text-lg text-secondary group-hover:underline">Edit Profile</span>
+              </div>
+              <p className="text-gray-600">Update your personal information and profile picture.</p>
+            </Link>
+          </div>
+
+          {/* My Listings Section */}
+          <div className="mt-12">
+            <h2 className="text-2xl font-bold mb-4 text-gray-900 flex items-center gap-2">
+              <ShoppingBag className="text-success" /> My Listings
+            </h2>
+            {isLoading ? (
+              <div className="flex h-40 items-center justify-center">
+                <LoadingSpinner size="lg" />
+              </div>
+            ) : userListings.length === 0 ? (
+              <div className="rounded-lg border-2 border-dashed border-gray-300 bg-white p-8 text-center">
+                <p className="mb-4 text-lg text-gray-600">You have not posted any listings yet.</p>
+                <Link to="/listings/create">
+                  <Button variant="primary">Post Your First Listing</Button>
+                </Link>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {userListings.map((listing) => (
+                  <Link
+                    key={listing.id}
+                    to={`/listings/${listing.id}`}
+                    className="group overflow-hidden rounded-lg bg-white shadow-md transition-all hover:shadow-lg"
+                  >
+                    <div className="relative h-40 overflow-hidden">
+                      <img
+                        src={listing.images[0]}
+                        alt={listing.title}
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                      <div className="absolute bottom-0 left-0 bg-accent px-3 py-1 text-sm font-medium text-white">
+                        {listing.category}
+                      </div>
+                    </div>
+                    <div className="p-4">
+                      <div className="mb-2 flex items-center justify-between">
+                        <h3 className="text-lg font-semibold text-gray-900">{listing.title}</h3>
+                        <span className="font-bold text-primary">{listing.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</span>
+                      </div>
+                      <p className="mb-3 text-sm text-gray-600">
+                        {listing.description.length > 80 ? `${listing.description.substring(0, 80)}...` : listing.description}
+                      </p>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-gray-500">{listing.location}</span>
+                        <span className="font-medium text-secondary">
+                          {new Date(listing.createdAt).toLocaleDateString()}
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* Right: Profile Card */}
+        <aside className="w-full md:w-80 bg-white rounded-3xl shadow-lg p-8 flex flex-col items-center">
+          <Avatar src={user?.profileImage} alt={user?.name} size="xl" />
+          <h2 className="mt-4 text-2xl font-bold text-gray-900">{user?.name}</h2>
+          <p className="text-gray-500 mb-4">{user?.email}</p>
+          <div className="flex gap-2 mb-6">
+            <span className="rounded-full bg-primary/10 px-3 py-1 text-xs text-primary font-medium">Student</span>
+            <span className="rounded-full bg-accent/10 px-3 py-1 text-xs text-accent font-medium">Seller</span>
+          </div>
+          <div className="w-full mt-4">
+            <div className="mb-4">
+              <span className="block text-sm text-gray-500">Listings</span>
+              <span className="text-lg font-bold text-gray-900">{userListings.length}</span>
+            </div>
+            <div className="mb-4">
+              <span className="block text-sm text-gray-500">Messages</span>
+              <span className="text-lg font-bold text-gray-900">--</span>
+            </div>
+            <div>
+              <span className="block text-sm text-gray-500">Member since</span>
+              <span className="text-lg font-bold text-gray-900">2025</span>
+            </div>
+          </div>
+        </aside>
+      </main>
     </div>
   );
 };

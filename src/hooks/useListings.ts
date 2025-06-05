@@ -161,22 +161,16 @@ export const useListings = create<ListingsState>()((set, get) => {
     
     getUserListings: async () => {
       set({ isLoading: true, error: null });
-      
       try {
         // Get current user
         const { user } = useAuth.getState();
-        
         if (!user) {
           throw new Error('Not authenticated');
         }
-        
         // Simulate API call
         await new Promise(resolve => setTimeout(resolve, 500));
-        
-        // In a real app, we would fetch user's listings from the API
-        // For demo, we'll just filter the mock listings with a random owner ID
-        const userListings = mockListings.filter(listing => listing.ownerId === 'user-1');
-        
+        // Filter listings by the actual logged-in user's ID
+        const userListings = get().listings.filter(listing => listing.ownerId === user.id);
         set({ userListings, isLoading: false });
         return userListings;
       } catch (error) {
