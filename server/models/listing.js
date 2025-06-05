@@ -9,7 +9,7 @@ const listingSchema = new mongoose.Schema({
   images: [{ type: String }],
   location: { type: String, required: true },
   ownerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  ownerName: { type: String, required: true },
+  ownerName: { type: String },
   ownerImage: { type: String },
   isFeatured: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
