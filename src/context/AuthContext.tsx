@@ -1,0 +1,1 @@
+// This file is deprecated. Please use zustand-based useAuth from hooks/useAuth.ts
