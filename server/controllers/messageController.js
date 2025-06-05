@@ -11,7 +11,14 @@ exports.getMessages = async (req, res, next) => {
 
 exports.sendMessage = async (req, res, next) => {
   try {
-    const message = await Message.create({ ...req.body, senderId: req.user.id });
+    // Always use listingId from params, not from body
+    const { text, receiverId } = req.body;
+    const senderId = req.user.id;
+    const listingId = req.params.listingId;
+    if (!text || !receiverId || !listingId) {
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
+    const message = await Message.create({ text, receiverId, listingId, senderId });
     res.status(201).json(message);
   } catch (err) {
     next(err);
