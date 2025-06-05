@@ -217,6 +217,119 @@ const MessagesPage: React.FC = () => {
     );
   }
 
+  // --- OLX-style UI ---
+  if (listingId && receiverId) {
+    // Find current conversation/listing info
+    const currentConv = conversations.find(c => c.listingId === listingId && c.receiverId === receiverId);
+    const listing = allListings.find(l => l._id === listingId);
+    const userInfo = userMap[receiverId] || {};
+    const listingTitle = listing?.title || 'Listing';
+    // For demo, fake price/details
+    const price = '₹ 1,000';
+    const details = 'Sample details';
+    // Last message preview for sidebar
+    const getLastMessage = (conv) => {
+      const msgs = messages.filter(m => m.listingId === conv.listingId && (m.senderId === conv.receiverId || m.receiverId === conv.receiverId));
+      return msgs.length > 0 ? msgs[msgs.length - 1].text : 'No messages yet.';
+    };
+    return (
+      <div className="flex h-[80vh] max-w-6xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden border">
+        {/* Sidebar: Inbox */}
+        <aside className="w-1/3 bg-gray-50 border-r flex flex-col">
+          <div className="px-6 py-4 border-b">
+            <h2 className="text-xl font-bold mb-2">INBOX</h2>
+            {/* Quick Filters */}
+            <div className="flex gap-2 mb-2">
+              <button className="px-3 py-1 rounded-full bg-blue-100 text-blue-700 font-semibold text-xs">All</button>
+              <button className="px-3 py-1 rounded-full bg-gray-200 text-gray-700 font-semibold text-xs">Meeting</button>
+              <button className="px-3 py-1 rounded-full bg-gray-200 text-gray-700 font-semibold text-xs">Unread</button>
+              <button className="px-3 py-1 rounded-full bg-gray-200 text-gray-700 font-semibold text-xs">Important</button>
+            </div>
+          </div>
+          {/* Conversation List */}
+          <div className="flex-1 overflow-y-auto">
+            {conversations.length === 0 ? (
+              <div className="text-gray-400 p-6">No conversations yet.</div>
+            ) : (
+              <ul>
+                {conversations.map(conv => {
+                  const isActive = conv.listingId === listingId && conv.receiverId === receiverId;
+                  const l = allListings.find(l => l._id === conv.listingId);
+                  return (
+                    <li
+                      key={`${conv.listingId}_${conv.receiverId}`}
+                      className={`flex items-center gap-3 px-6 py-4 cursor-pointer border-b hover:bg-blue-50 transition ${isActive ? 'bg-blue-100' : ''}`}
+                      onClick={() => navigate(`/messages/${conv.listingId}/${conv.receiverId}`)}
+                    >
+                      <div className="w-12 h-12 rounded bg-gray-200 flex items-center justify-center overflow-hidden">
+                        {/* Listing image placeholder */}
+                        <span className="text-2xl">🏠</span>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold truncate">{l?.title || 'Listing'}</div>
+                        <div className="text-xs text-gray-500 truncate">{getLastMessage(conv)}</div>
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
+        </aside>
+        {/* Chat Panel */}
+        <section className="flex-1 flex flex-col bg-white">
+          {/* Chat header with listing details */}
+          <div className="flex items-center gap-4 px-6 py-4 border-b bg-gray-50">
+            <div className="w-14 h-14 rounded bg-gray-200 flex items-center justify-center overflow-hidden">
+              <span className="text-2xl">🏠</span>
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="font-bold text-lg truncate">{listingTitle}</div>
+              <div className="text-xs text-gray-500 truncate">{price} &nbsp;|&nbsp; {details}</div>
+            </div>
+          </div>
+          {/* Messages */}
+          <div className="flex-1 overflow-y-auto px-6 py-4 bg-white">
+            {messages.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full text-gray-400">No messages yet. Start the conversation!</div>
+            ) : (
+              <div className="flex flex-col gap-2">
+                {messages.map((msg, idx) => (
+                  <div key={msg._id || idx} className={`flex ${msg.senderId === user?.id ? 'justify-end' : 'justify-start'}`}>
+                    <div className={`rounded-lg px-4 py-2 max-w-[70%] text-sm shadow ${msg.senderId === user?.id ? 'bg-blue-100 text-blue-900' : 'bg-gray-100 text-gray-900'}`}>
+                      {msg.text}
+                    </div>
+                  </div>
+                ))}
+                <div ref={chatEndRef} />
+              </div>
+            )}
+          </div>
+          {/* Quick Questions (static) */}
+          <div className="border-t bg-gray-50 px-6 py-2">
+            <div className="flex gap-2 flex-wrap text-xs mb-2">
+              <button className="bg-gray-200 px-3 py-1 rounded-full">Is it still available?</button>
+              <button className="bg-gray-200 px-3 py-1 rounded-full">Let's meet up?</button>
+              <button className="bg-gray-200 px-3 py-1 rounded-full">What is the current location?</button>
+              <button className="bg-gray-200 px-3 py-1 rounded-full">Can you share more pictures?</button>
+            </div>
+          </div>
+          {/* Message input */}
+          <form onSubmit={sendNewMessage} className="flex items-center gap-2 px-6 py-4 border-t bg-white">
+            <input
+              type="text"
+              value={text}
+              onChange={e => setText(e.target.value)}
+              placeholder="Type a message"
+              className="flex-1 rounded-full border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            />
+            <button type="submit" className="bg-blue-600 text-white px-5 py-2 rounded-full font-bold hover:bg-blue-700 transition">Send</button>
+          </form>
+        </section>
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-[80vh] max-w-5xl mx-auto bg-gray-900 rounded-lg shadow-lg overflow-hidden">
       {/* Sidebar */}
