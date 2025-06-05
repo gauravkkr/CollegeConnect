@@ -107,6 +107,17 @@ const Header = () => {
             </div>
           )}
         </div>
+        {/* Auth Buttons */}
+        {!token && (
+          <>
+            <Link to="/login" className="flex items-center gap-2 px-5 py-2 rounded-lg bg-orange-700 text-white font-bold hover:bg-orange-800 transition text-lg">
+              Login
+            </Link>
+            <Link to="/signup" className="flex items-center gap-2 px-5 py-2 rounded-lg border-2 border-orange-700 text-orange-700 font-bold hover:bg-orange-700 hover:text-white transition text-lg ml-2">
+              Sign Up
+            </Link>
+          </>
+        )}
       </nav>
     </header>
   );
