@@ -130,7 +130,7 @@ const LoginPage = () => {
                 {...register('rememberMe')}
               />
               <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900 select-none cursor-pointer">
-                Remember me
+                Remember mee
               </label>
             </div>
 
