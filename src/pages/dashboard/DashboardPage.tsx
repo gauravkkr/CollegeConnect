@@ -1,16 +1,15 @@
 import { useAuth } from '../../hooks/useAuth';
 import { NavLink, useNavigate, Link } from 'react-router-dom';
 import Avatar from '../../components/ui/Avatar';
-import { User, MessageCircle, ShoppingBag, LogOut, Edit3 } from 'lucide-react';
+import { User, ShoppingBag, LogOut, Edit3, Bell } from 'lucide-react';
 import { useListings } from '../../hooks/useListings';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import LoadingSpinner from '../../components/ui/LoadingSpinner';
 import Button from '../../components/ui/Button';
 
 const navLinks = [
   { label: 'Dashboard', icon: User, to: '/dashboard' },
   { label: 'Profile', icon: Edit3, to: '/profile' },
-  { label: 'Messages', icon: MessageCircle, to: '/messages' },
   { label: 'My Listings', icon: ShoppingBag, to: '/listings' },
   { label: 'Post Listing', icon: ShoppingBag, to: '/listings/create' },
 ];
@@ -19,9 +18,15 @@ const DashboardPage = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const { userListings, getUserListings, isLoading } = useListings();
+  const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
     getUserListings();
+    // Fetch unread messages count
+    fetch('/api/messages/unread', { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+      .then(res => res.json())
+      .then(data => setUnreadCount(data.count || 0))
+      .catch(() => setUnreadCount(0));
   }, [getUserListings]);
 
   const handleLogout = () => {
@@ -37,12 +42,40 @@ const DashboardPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f6f8fa] flex">
+    <div className="min-h-screen bg-[#f6f8fa] flex flex-col">
+      {/* Dashboard Navbar */}
+      <header className="w-full flex items-center justify-between px-8 py-4 bg-gradient-to-r from-[#18181b] via-[#232526] to-[#232526] shadow">
+        <div className="flex items-center gap-4">
+          <Avatar src={user?.profileImage} alt={user?.name} size="md" />
+          <span className="text-lg font-bold text-white">Welcome, {user?.name?.split(' ')[0] || 'Student'}</span>
+        </div>
+        <div className="flex items-center gap-6">
+          {/* Message Icon with badge */}
+          <button
+            className="relative group"
+            onClick={() => navigate('/messages')}
+            aria-label="Messages"
+          >
+            <Bell className="h-7 w-7 text-white hover:text-primary transition" />
+            {unreadCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 font-bold animate-pulse">
+                {unreadCount}
+              </span>
+            )}
+          </button>
+          <button onClick={handleLogout} className="flex items-center gap-2 text-destructive hover:text-destructive-dark transition py-2 px-4 rounded-xl bg-white/10">
+            <LogOut className="h-5 w-5" />
+            <span className="text-xs font-semibold">Logout</span>
+          </button>
+        </div>
+      </header>
+      <div className="flex flex-1">
       {/* Sidebar */}
       <aside className="hidden md:flex flex-col items-center gap-4 bg-white border-r border-gray-200 py-8 px-4 min-w-[90px] rounded-tr-3xl rounded-br-3xl shadow-md">
         <Avatar src={user?.profileImage} alt={user?.name} size="md" className="mb-4" />
         <nav className="flex flex-col gap-6 mt-8 w-full">
-          {navLinks.map(link => {
+          {/* Remove Messages from navLinks */}
+          {navLinks.filter(link => link.label !== 'Messages').map(link => {
             const Icon = link.icon;
             return (
               <NavLink
@@ -61,12 +94,7 @@ const DashboardPage = () => {
             );
           })}
         </nav>
-        <button onClick={handleLogout} className="mt-auto flex flex-col items-center text-destructive hover:text-destructive-dark transition py-2 w-full rounded-xl">
-          <LogOut className="h-7 w-7 mb-1" />
-          <span className="text-xs">Logout</span>
-        </button>
       </aside>
-
       {/* Main Content */}
       <main className="flex-1 flex flex-col md:flex-row gap-8 p-6 md:p-12">
         {/* Left: Welcome & Cards */}
@@ -83,13 +111,6 @@ const DashboardPage = () => {
                 <span className="font-semibold text-lg text-accent group-hover:underline">Post a Listing</span>
               </div>
               <p className="text-gray-600">Sell books, electronics, or anything else to students.</p>
-            </Link>
-            <Link to="/messages" className="rounded-2xl bg-[#e6f6fb] p-6 shadow hover:shadow-lg transition group">
-              <div className="flex items-center gap-3 mb-2">
-                <MessageCircle className="text-primary" />
-                <span className="font-semibold text-lg text-primary group-hover:underline">Messages</span>
-              </div>
-              <p className="text-gray-600">View and reply to your conversations.</p>
             </Link>
             <Link to="/listings" className="rounded-2xl bg-[#e6fbe9] p-6 shadow hover:shadow-lg transition group">
               <div className="flex items-center gap-3 mb-2">
@@ -188,6 +209,7 @@ const DashboardPage = () => {
           </div>
         </aside>
       </main>
+      </div>
     </div>
   );
 };

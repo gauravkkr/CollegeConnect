@@ -150,7 +150,7 @@ const ListingDetailPage = () => {
               </div>
             ) : (
               <div className="flex space-x-4">
-                <Link to={`/messages/${currentListing.ownerId}`} className="flex-1">
+                <Link to={`/messages/${currentListing.id}/${currentListing.ownerId}`} className="flex-1">
                   <Button variant="primary" className="w-full">
                     <MessageCircle className="mr-2 h-4 w-4" />
                     Message Seller

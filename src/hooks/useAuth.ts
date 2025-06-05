@@ -35,87 +35,58 @@ export const useAuth = create<AuthState>()(
       error: null,
       
       login: async (email: string, password: string) => {
-        // Reset any previous errors
         set({ isLoading: true, error: null });
-        
         try {
-          // Simulate API call
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          
-          // For demo purposes, accept any credentials with proper format
-          const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-          const isValidPassword = password.length >= 6;
-          
-          if (!isValidEmail || !isValidPassword) {
-            throw new Error('Invalid credentials');
+          const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password }),
+          });
+          if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.message || 'Login failed');
           }
-          
-          // Create mock user data (in real app, this would come from the API)
-          const mockUser: User = {
-            id: '123456',
-            name: email.split('@')[0],
-            email,
-            profileImage: null,
-            role: 'user',
-          };
-          
-          const mockToken = 'mock-jwt-token';
-          
-          set({ 
-            user: mockUser,
-            token: mockToken,
+          const data = await res.json();
+          set({
+            user: data.user,
+            token: data.token,
             isLoading: false,
           });
-          
           toast.success('Successfully logged in!');
         } catch (error) {
-          set({ 
-            isLoading: false, 
-            error: error instanceof Error ? error.message : 'An unknown error occurred' 
+          set({
+            isLoading: false,
+            error: error instanceof Error ? error.message : 'An unknown error occurred',
           });
           toast.error('Login failed. Please check your credentials.');
         }
       },
-      
+
       signup: async (name: string, email: string, password: string) => {
         set({ isLoading: true, error: null });
-        
         try {
-          // Simulate API call
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          
-          // Validate input
-          const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-          const isValidPassword = password.length >= 6;
-          
-          if (!name || !isValidEmail || !isValidPassword) {
-            throw new Error('Invalid signup information');
+          const res = await fetch('/api/auth/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username: name, email, password }),
+          });
+          if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.message || 'Signup failed');
           }
-          
-          // Create mock user data
-          const mockUser: User = {
-            id: '123456',
-            name,
-            email,
-            profileImage: null,
-            role: 'user',
-          };
-          
-          const mockToken = 'mock-jwt-token';
-          
-          set({ 
-            user: mockUser,
-            token: mockToken,
+          const data = await res.json();
+          set({
+            user: data.user,
+            token: data.token,
             isLoading: false,
           });
-          
-          toast.success('Account created successfully!');
+          toast.success('Successfully signed up!');
         } catch (error) {
-          set({ 
-            isLoading: false, 
-            error: error instanceof Error ? error.message : 'An unknown error occurred' 
+          set({
+            isLoading: false,
+            error: error instanceof Error ? error.message : 'An unknown error occurred',
           });
-          toast.error('Signup failed. Please try again.');
+          toast.error('Signup failed. Please check your information.');
         }
       },
       
