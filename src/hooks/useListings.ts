@@ -254,35 +254,27 @@ export const useListings = create<ListingsState>()((set, get) => {
     
     deleteListing: async (id: string) => {
       set({ isLoading: true, error: null });
-      
       try {
-        // Get current user
-        const { user } = useAuth.getState();
-        
-        if (!user) {
+        // Get current user and token
+        const { user, token } = useAuth.getState();
+        if (!user || !token) {
           throw new Error('Not authenticated');
         }
-        
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // Find listing
-        const existingListing = get().listings.find(listing => listing.id === id);
-        
-        if (!existingListing) {
-          throw new Error('Listing not found');
+        // Call backend DELETE API
+        const res = await fetch(`/api/listings/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.message || 'Failed to delete listing');
         }
-        
-        // Check ownership
-        if (existingListing.ownerId !== user.id && user.role !== 'admin') {
-          throw new Error('Not authorized to delete this listing');
-        }
-        
         // Update state by filtering out the deleted listing
         const updatedListings = get().listings.filter(listing => listing.id !== id);
         const updatedUserListings = get().userListings.filter(listing => listing.id !== id);
         const updatedFeaturedListings = get().featuredListings.filter(listing => listing.id !== id);
-        
         set({ 
           listings: updatedListings,
           userListings: updatedUserListings,
@@ -290,7 +282,6 @@ export const useListings = create<ListingsState>()((set, get) => {
           currentListing: null,
           isLoading: false 
         });
-        
         toast.success('Listing deleted successfully!');
         return true;
       } catch (error) {
