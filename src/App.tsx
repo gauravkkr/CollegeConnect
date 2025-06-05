@@ -37,6 +37,7 @@ function App() {
             <Route path="listings/edit/:id" element={<EditListingPage />} />
             <Route path="messages" element={<MessagesPage />} />
             <Route path="messages/:userId" element={<MessagesPage />} />
+            <Route path="messages/:listingId/:receiverId" element={<MessagesPage />} />
           </Route>
           
           {/* 404 page */}

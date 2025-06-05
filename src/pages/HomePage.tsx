@@ -25,10 +25,10 @@ const HomePage = () => {
   const categories = [
     { name: 'Textbooks', icon: '📚' },
     { name: 'Electronics', icon: '💻' },
-    { name: 'Furniture', icon: '🪑' },
     { name: 'Clothing', icon: '👕' },
     { name: 'Appliances', icon: '🔌' },
-    { name: 'Services', icon: '🛠️' },
+    { name: 'Notes', icon: '📝' },
+    { name: 'PYQ', icon: '📄' },
   ];
   
   return (

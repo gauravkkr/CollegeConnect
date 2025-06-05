@@ -104,10 +104,10 @@ const CreateListingPage = () => {
   const categories = [
     'Textbooks',
     'Electronics',
-    'Furniture',
     'Clothing',
     'Appliances',
-    'Services',
+    'Notes',
+    'PYQ',
     'Other',
   ];
   

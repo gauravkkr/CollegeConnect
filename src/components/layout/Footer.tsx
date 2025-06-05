@@ -59,13 +59,16 @@ const Footer = () => {
                 <Link to="/listings?category=electronics" className="text-gray-400 transition-colors hover:text-white">Electronics</Link>
               </li>
               <li>
-                <Link to="/listings?category=furniture" className="text-gray-400 transition-colors hover:text-white">Furniture</Link>
-              </li>
-              <li>
                 <Link to="/listings?category=clothing" className="text-gray-400 transition-colors hover:text-white">Clothing</Link>
               </li>
               <li>
-                <Link to="/listings?category=services" className="text-gray-400 transition-colors hover:text-white">Services</Link>
+                <Link to="/listings?category=appliances" className="text-gray-400 transition-colors hover:text-white">Appliances</Link>
+              </li>
+              <li>
+                <Link to="/listings?category=notes" className="text-gray-400 transition-colors hover:text-white">Notes</Link>
+              </li>
+              <li>
+                <Link to="/listings?category=pyq" className="text-gray-400 transition-colors hover:text-white">PYQ</Link>
               </li>
             </ul>
           </div>

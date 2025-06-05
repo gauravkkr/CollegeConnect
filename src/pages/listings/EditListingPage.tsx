@@ -141,10 +141,10 @@ const EditListingPage = () => {
   const categories = [
     'Textbooks',
     'Electronics',
-    'Furniture',
     'Clothing',
     'Appliances',
-    'Services',
+    'Notes',
+    'PYQ',
     'Other',
   ];
   

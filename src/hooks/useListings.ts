@@ -43,186 +43,104 @@ interface ListingsState {
   deleteListing: (id: string) => Promise<boolean>;
 }
 
-// Mock data
-const mockCategories = [
-  'Textbooks',
-  'Electronics',
-  'Furniture',
-  'Clothing',
-  'Appliances',
-  'Services',
-  'Other'
-];
-
-const mockConditions = ['New', 'Like New', 'Good', 'Fair', 'Poor'];
-
-const mockLocations = [
-  'North Campus',
-  'South Campus',
-  'West Dorms',
-  'East Dorms',
-  'Off Campus'
-];
-
-// Generate mock listings
-const generateMockListings = (count: number): Listing[] => {
-  return Array.from({ length: count }, (_, i) => {
-    const category = mockCategories[Math.floor(Math.random() * mockCategories.length)];
-    const condition = mockConditions[Math.floor(Math.random() * mockConditions.length)] as Listing['condition'];
-    const location = mockLocations[Math.floor(Math.random() * mockLocations.length)];
-    const price = Math.floor(Math.random() * 200) + 5;
-    const isFeatured = Math.random() > 0.8;
-    
-    return {
-      id: `listing-${i}`,
-      title: `${category} Item ${i + 1}`,
-      description: `This is a detailed description for item ${i + 1}. It's a ${condition.toLowerCase()} condition item available for purchase.`,
-      price,
-      category,
-      condition,
-      images: [
-        `https://images.pexels.com/photos/${1000000 + i * 10}/pexels-photo-${1000000 + i * 10}.jpeg`,
-        `https://images.pexels.com/photos/${1000000 + i * 10 + 1}/pexels-photo-${1000000 + i * 10 + 1}.jpeg`
-      ],
-      createdAt: new Date(Date.now() - Math.floor(Math.random() * 30) * 24 * 60 * 60 * 1000).toISOString(),
-      updatedAt: new Date().toISOString(),
-      ownerId: `user-${Math.floor(Math.random() * 10)}`,
-      ownerName: `User ${Math.floor(Math.random() * 10)}`,
-      ownerImage: Math.random() > 0.5 ? `https://i.pravatar.cc/150?u=${i}` : null,
-      location,
-      isFeatured
-    };
-  });
-};
-
 // Create the store
 export const useListings = create<ListingsState>()((set, get) => {
-  // Generate initial mock data
-  const mockListings = generateMockListings(20);
-  
   return {
-    listings: mockListings,
+    listings: [],
     userListings: [],
-    featuredListings: mockListings.filter(listing => listing.isFeatured),
+    featuredListings: [],
     currentListing: null,
     isLoading: false,
     error: null,
-    
+
     getListings: async (filters) => {
       set({ isLoading: true, error: null });
-      
       try {
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        // Apply filters if any
-        let filteredListings = [...mockListings];
-        
+        let url = '/api/listings';
+        const params = [];
         if (filters) {
-          if (filters.category) {
-            filteredListings = filteredListings.filter(
-              listing => listing.category.toLowerCase() === filters.category.toLowerCase()
-            );
-          }
-          
-          if (filters.search) {
-            const searchTerm = filters.search.toLowerCase();
-            filteredListings = filteredListings.filter(
-              listing => 
-                listing.title.toLowerCase().includes(searchTerm) || 
-                listing.description.toLowerCase().includes(searchTerm)
-            );
-          }
-          
-          if (filters.minPrice) {
-            filteredListings = filteredListings.filter(
-              listing => listing.price >= filters.minPrice
-            );
-          }
-          
-          if (filters.maxPrice) {
-            filteredListings = filteredListings.filter(
-              listing => listing.price <= filters.maxPrice
-            );
-          }
+          if (filters.category) params.push(`category=${encodeURIComponent(filters.category)}`);
+          if (filters.search) params.push(`search=${encodeURIComponent(filters.search)}`);
+          if (filters.minPrice) params.push(`minPrice=${filters.minPrice}`);
+          if (filters.maxPrice) params.push(`maxPrice=${filters.maxPrice}`);
         }
-        
-        set({ listings: filteredListings, isLoading: false });
-        return filteredListings;
+        if (params.length) url += `?${params.join('&')}`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('Failed to fetch listings');
+        // Map _id to id for frontend compatibility
+        const listings = (await res.json()).map((l: any) => ({ ...l, id: l._id }));
+        set({ listings, isLoading: false });
+        return listings;
       } catch (error) {
-        set({ 
-          isLoading: false, 
-          error: error instanceof Error ? error.message : 'Failed to fetch listings'
+        set({
+          isLoading: false,
+          error: error instanceof Error ? error.message : 'Failed to fetch listings',
+          listings: []
         });
         toast.error('Failed to load listings');
         return [];
       }
     },
-    
+
     getUserListings: async () => {
       set({ isLoading: true, error: null });
       try {
-        // Get current user
         const { user } = useAuth.getState();
-        if (!user) {
-          throw new Error('Not authenticated');
-        }
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 500));
-        // Filter listings by the actual logged-in user's ID
-        const userListings = get().listings.filter(listing => listing.ownerId === user.id);
+        if (!user) throw new Error('Not authenticated');
+        const res = await fetch(`/api/listings?ownerId=${user.id}`);
+        if (!res.ok) throw new Error('Failed to fetch user listings');
+        // Map _id to id for frontend compatibility
+        const userListings = (await res.json()).map((l: any) => ({ ...l, id: l._id }));
         set({ userListings, isLoading: false });
         return userListings;
       } catch (error) {
-        set({ 
-          isLoading: false, 
-          error: error instanceof Error ? error.message : 'Failed to fetch user listings'
+        set({
+          isLoading: false,
+          error: error instanceof Error ? error.message : 'Failed to fetch user listings',
+          userListings: []
         });
         toast.error('Failed to load your listings');
         return [];
       }
     },
-    
+
     getFeaturedListings: async () => {
       set({ isLoading: true, error: null });
-      
       try {
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        const featuredListings = mockListings.filter(listing => listing.isFeatured);
-        
+        const res = await fetch('/api/listings?isFeatured=true');
+        if (!res.ok) throw new Error('Failed to fetch featured listings');
+        // Map _id to id for frontend compatibility
+        const featuredListings = (await res.json()).map((l: any) => ({ ...l, id: l._id }));
         set({ featuredListings, isLoading: false });
         return featuredListings;
       } catch (error) {
-        set({ 
-          isLoading: false, 
-          error: error instanceof Error ? error.message : 'Failed to fetch featured listings'
+        set({
+          isLoading: false,
+          error: error instanceof Error ? error.message : 'Failed to fetch featured listings',
+          featuredListings: []
         });
         toast.error('Failed to load featured listings');
         return [];
       }
     },
-    
+
     getListing: async (id: string) => {
       set({ isLoading: true, error: null, currentListing: null });
-      
       try {
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        const listing = mockListings.find(listing => listing.id === id) || null;
-        
-        if (!listing) {
+        const res = await fetch(`/api/listings/${id}`);
+        if (!res.ok) {
           throw new Error('Listing not found');
         }
-        
+        const l = await res.json();
+        // Map _id to id for frontend compatibility
+        const listing = { ...l, id: l._id };
         set({ currentListing: listing, isLoading: false });
         return listing;
       } catch (error) {
         set({ 
           isLoading: false, 
-          error: error instanceof Error ? error.message : 'Failed to fetch listing'
+          error: error instanceof Error ? error.message : 'Failed to fetch listing',
+          currentListing: null
         });
         toast.error('Failed to load listing details');
         return null;
@@ -231,39 +149,36 @@ export const useListings = create<ListingsState>()((set, get) => {
     
     createListing: async (data: ListingFormData) => {
       set({ isLoading: true, error: null });
-      
       try {
         // Get current user
-        const { user } = useAuth.getState();
-        
-        if (!user) {
+        const { user, token } = useAuth.getState();
+        if (!user || !token) {
           throw new Error('Not authenticated');
         }
-        
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // Create new listing
-        const newListing: Listing = {
-          ...data,
-          id: `listing-${Date.now()}`,
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          ownerId: user.id,
-          ownerName: user.name,
-          ownerImage: user.profileImage,
-        };
-        
+        // Send POST request to backend
+        const res = await fetch('/api/listings', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(data),
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.message || 'Failed to create listing');
+        }
+        const l = await res.json();
+        // Map _id to id for frontend compatibility
+        const newListing: Listing = { ...l, id: l._id };
         // Update listings state
         const updatedListings = [newListing, ...get().listings];
         const updatedUserListings = [newListing, ...get().userListings];
-        
         set({ 
           listings: updatedListings,
           userListings: updatedUserListings,
           isLoading: false 
         });
-        
         toast.success('Listing created successfully!');
         return newListing;
       } catch (error) {
@@ -339,35 +254,27 @@ export const useListings = create<ListingsState>()((set, get) => {
     
     deleteListing: async (id: string) => {
       set({ isLoading: true, error: null });
-      
       try {
-        // Get current user
-        const { user } = useAuth.getState();
-        
-        if (!user) {
+        // Get current user and token
+        const { user, token } = useAuth.getState();
+        if (!user || !token) {
           throw new Error('Not authenticated');
         }
-        
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // Find listing
-        const existingListing = get().listings.find(listing => listing.id === id);
-        
-        if (!existingListing) {
-          throw new Error('Listing not found');
+        // Call backend DELETE API
+        const res = await fetch(`/api/listings/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.message || 'Failed to delete listing');
         }
-        
-        // Check ownership
-        if (existingListing.ownerId !== user.id && user.role !== 'admin') {
-          throw new Error('Not authorized to delete this listing');
-        }
-        
         // Update state by filtering out the deleted listing
         const updatedListings = get().listings.filter(listing => listing.id !== id);
         const updatedUserListings = get().userListings.filter(listing => listing.id !== id);
         const updatedFeaturedListings = get().featuredListings.filter(listing => listing.id !== id);
-        
         set({ 
           listings: updatedListings,
           userListings: updatedUserListings,
@@ -375,7 +282,6 @@ export const useListings = create<ListingsState>()((set, get) => {
           currentListing: null,
           isLoading: false 
         });
-        
         toast.success('Listing deleted successfully!');
         return true;
       } catch (error) {

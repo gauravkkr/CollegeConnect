@@ -19,10 +19,10 @@ const ListingsPage = () => {
     'All',
     'Textbooks',
     'Electronics',
-    'Furniture',
     'Clothing',
     'Appliances',
-    'Services',
+    'Notes',
+    'PYQ',
   ];
   
   return (
