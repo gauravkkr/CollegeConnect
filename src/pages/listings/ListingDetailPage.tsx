@@ -55,109 +55,120 @@ const ListingDetailPage = () => {
   
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Back Button */}
-      <Link 
-        to="/listings"
-        className="mb-6 inline-flex items-center text-gray-600 hover:text-gray-900"
-      >
-        <ArrowLeft className="mr-2 h-4 w-4" />
-        Back to Listings
-      </Link>
-      
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-        {/* Image Gallery */}
-        <div className="space-y-4">
-          <div className="aspect-w-4 aspect-h-3 overflow-hidden rounded-lg">
-            <img
-              src={currentListing.images[0]}
-              alt={currentListing.title}
-              className="h-full w-full object-cover"
-            />
-          </div>
-          
-          {currentListing.images.length > 1 && (
-            <div className="grid grid-cols-4 gap-4">
-              {currentListing.images.slice(1).map((image, index) => (
-                <div key={index} className="aspect-w-1 aspect-h-1 overflow-hidden rounded-lg">
-                  <img
-                    src={image}
-                    alt={`${currentListing.title} - Image ${index + 2}`}
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+      <div className="rounded-lg bg-white p-8 shadow-lg max-w-3xl mx-auto">
+        {window.history.length > 1 && (
+          <button
+            onClick={() => navigate(-1)}
+            className="mb-8 flex items-center gap-2 px-4 py-2 rounded-2xl bg-gradient-to-r from-[#ef6c13] to-[#f3701a] text-white font-bold shadow hover:from-[#e65c00] hover:to-[#f3701a]"
+          >
+            &#8592; Back
+          </button>
+        )}
         
-        {/* Listing Details */}
-        <div className="space-y-6">
-          <div>
-            <div className="flex items-center justify-between">
-              <h1 className="text-3xl font-bold text-gray-900">{currentListing.title}</h1>
-              <span className="text-2xl font-bold text-primary">
-                {formatPrice(currentListing.price)}
-              </span>
-            </div>
-            <div className="mt-2 flex items-center space-x-4 text-sm text-gray-500">
-              <span>{currentListing.category}</span>
-              <span>•</span>
-              <span>{currentListing.condition}</span>
-              <span>•</span>
-              <span>{currentListing.location}</span>
-            </div>
-          </div>
-          
-          <div className="border-t border-gray-200 pt-6">
-            <h2 className="mb-4 text-lg font-semibold">Description</h2>
-            <p className="whitespace-pre-wrap text-gray-600">{currentListing.description}</p>
-          </div>
-          
-          <div className="border-t border-gray-200 pt-6">
-            <h2 className="mb-4 text-lg font-semibold">Seller Information</h2>
-            <div className="flex items-center space-x-4">
-              <Avatar
-                src={currentListing.ownerImage}
-                alt={currentListing.ownerName}
-                size="lg"
+        {/* Back Button */}
+        <Link 
+          to="/listings"
+          className="mb-6 inline-flex items-center text-gray-600 hover:text-gray-900"
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to Listings
+        </Link>
+        
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+          {/* Image Gallery */}
+          <div className="space-y-4">
+            <div className="aspect-w-4 aspect-h-3 overflow-hidden rounded-lg">
+              <img
+                src={currentListing.images[0]}
+                alt={currentListing.title}
+                className="h-full w-full object-cover"
               />
-              <div>
-                <p className="font-medium text-gray-900">{currentListing.ownerName}</p>
-                <p className="text-sm text-gray-500">
-                  Member since {new Date(currentListing.createdAt).toLocaleDateString()}
-                </p>
-              </div>
             </div>
-          </div>
-          
-          <div className="border-t border-gray-200 pt-6">
-            {isOwner ? (
-              <div className="flex space-x-4">
-                <Link to={`/listings/edit/${currentListing.id}`} className="flex-1">
-                  <Button variant="outline" className="w-full">
-                    <Edit className="mr-2 h-4 w-4" />
-                    Edit Listing
-                  </Button>
-                </Link>
-                <Button 
-                  variant="destructive" 
-                  className="flex-1"
-                  onClick={handleDelete}
-                >
-                  <Trash className="mr-2 h-4 w-4" />
-                  Delete Listing
-                </Button>
-              </div>
-            ) : (
-              <div className="flex space-x-4">
-                <Link to={`/messages/${currentListing.id}/${currentListing.ownerId}`} className="flex-1">
-                  <Button variant="primary" className="w-full">
-                    <MessageCircle className="mr-2 h-4 w-4" />
-                    Message Seller
-                  </Button>
-                </Link>
+            
+            {currentListing.images.length > 1 && (
+              <div className="grid grid-cols-4 gap-4">
+                {currentListing.images.slice(1).map((image, index) => (
+                  <div key={index} className="aspect-w-1 aspect-h-1 overflow-hidden rounded-lg">
+                    <img
+                      src={image}
+                      alt={`${currentListing.title} - Image ${index + 2}`}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                ))}
               </div>
             )}
+          </div>
+          
+          {/* Listing Details */}
+          <div className="space-y-6">
+            <div>
+              <div className="flex items-center justify-between">
+                <h1 className="text-3xl font-bold text-gray-900">{currentListing.title}</h1>
+                <span className="text-2xl font-bold text-primary">
+                  {formatPrice(currentListing.price)}
+                </span>
+              </div>
+              <div className="mt-2 flex items-center space-x-4 text-sm text-gray-500">
+                <span>{currentListing.category}</span>
+                <span>•</span>
+                <span>{currentListing.condition}</span>
+                <span>•</span>
+                <span>{currentListing.location}</span>
+              </div>
+            </div>
+            
+            <div className="border-t border-gray-200 pt-6">
+              <h2 className="mb-4 text-lg font-semibold">Description</h2>
+              <p className="whitespace-pre-wrap text-gray-600">{currentListing.description}</p>
+            </div>
+            
+            <div className="border-t border-gray-200 pt-6">
+              <h2 className="mb-4 text-lg font-semibold">Seller Information</h2>
+              <div className="flex items-center space-x-4">
+                <Avatar
+                  src={currentListing.ownerImage}
+                  alt={currentListing.ownerName}
+                  size="lg"
+                />
+                <div>
+                  <p className="font-medium text-gray-900">{currentListing.ownerName}</p>
+                  <p className="text-sm text-gray-500">
+                    Member since {new Date(currentListing.createdAt).toLocaleDateString()}
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <div className="border-t border-gray-200 pt-6">
+              {isOwner ? (
+                <div className="flex space-x-4">
+                  <Link to={`/listings/edit/${currentListing.id}`} className="flex-1">
+                    <Button variant="outline" className="w-full">
+                      <Edit className="mr-2 h-4 w-4" />
+                      Edit Listing
+                    </Button>
+                  </Link>
+                  <Button 
+                    variant="destructive" 
+                    className="flex-1"
+                    onClick={handleDelete}
+                  >
+                    <Trash className="mr-2 h-4 w-4" />
+                    Delete Listing
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex space-x-4">
+                  <Link to={`/messages/${currentListing.id}/${currentListing.ownerId}`} className="flex-1">
+                    <Button variant="primary" className="w-full">
+                      <MessageCircle className="mr-2 h-4 w-4" />
+                      Message Seller
+                    </Button>
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

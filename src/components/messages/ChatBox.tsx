@@ -122,6 +122,12 @@ const ChatBox: React.FC<ChatBoxProps> = ({
             </ul>
           )}
         </div>
+        {/* User prompt for messaging the seller */}
+        <div className="mb-4 px-4 py-2 bg-blue-50 border border-blue-200 rounded text-blue-900 text-sm">
+          <div className="font-semibold mb-1">Send a message to the seller below.</div>
+          <div>The seller will receive your message and can reply to you directly. Please include any details or questions you have about the product or service.</div>
+          <div className="mt-2 italic text-blue-700">Example: "Hi, I’m interested in this product. Could you tell me if it’s available in other colors?"</div>
+        </div>
         <form onSubmit={onSend} className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 mt-4 w-full">
           <input
             type="text"

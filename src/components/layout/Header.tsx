@@ -1,19 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { LogOut, MessageCircle, ShoppingBag, Home, PlusCircle, Bell, User, Moon, Sun } from 'lucide-react';
+import { useTheme } from '../../context/useTheme';
 
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showNotifications, setShowNotifications] = useState(false);
-  const [darkMode, setDarkMode] = useState(() => {
-    // Persist theme in localStorage
-    const stored = localStorage.getItem('theme');
-    return stored === 'dark';
-  });
-  const navigate = useNavigate();
   const { token, logout } = useAuth();
+  const { darkMode, setDarkMode } = useTheme();
 
   const notifications = [
     { id: 1, text: 'New message from Alice', link: '/messages' },
@@ -21,15 +17,7 @@ const Header = () => {
     { id: 3, text: 'New message from Bob', link: '/messages' },
   ];
 
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    }
-  }, [darkMode]);
+  const navigate = useNavigate();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,7 +31,10 @@ const Header = () => {
       {/* Logo and Brand */}
       <div className="flex items-center gap-4 min-w-[260px]">
         <Home className="text-primary h-9 w-9 mr-2" />
-        <Link to="/" className="font-extrabold text-3xl text-black tracking-tight select-none">CollegeConnect</Link>
+        <Link to="/" className="font-extrabold text-3xl text-black tracking-tight select-none">
+          <span className="text-[#ef6c13]">C</span>ollege
+          <span className="text-[#ef6c13]">C</span>onnect
+        </Link>
       </div>
       {/* Search Bar */}
       <div className="flex-1 flex items-center justify-center">
@@ -74,7 +65,7 @@ const Header = () => {
         {/* Dark/Light Mode Toggle */}
         <button
           className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition text-lg font-bold"
-          onClick={() => setDarkMode(dm => !dm)}
+          onClick={() => setDarkMode(!darkMode)}
           title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
         >
           {darkMode ? <Sun className="h-6 w-6 text-yellow-400" /> : <Moon className="h-6 w-6 text-gray-700" />}

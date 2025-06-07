@@ -159,205 +159,215 @@ const EditListingPage = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mx-auto max-w-2xl">
-        <h1 className="mb-6 text-3xl font-bold">Edit Listing</h1>
-        
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* Title */}
-          <div>
-            <label htmlFor="title"className="block text-sm font-medium text-gray-700">
-              Title
-            </label>
-            <input
-              type="text"
-              id="title"
-              className={`mt-1 block w-full rounded-md shadow-sm focus:border-primary focus:ring-primary sm:text-sm ${
-                errors.title ? 'border-red-500' : 'border-gray-300'
-              }`}
-              {...register('title')}
-            />
-            {errors.title && (
-              <p className="mt-1 text-xs text-red-600">{errors.title.message}</p>
-            )}
-          </div>
-          
-          {/* Description */}
-          <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-              Description
-            </label>
-            <textarea
-              id="description"
-              rows={4}
-              className={`mt-1 block w-full rounded-md shadow-sm focus:border-primary focus:ring-primary sm:text-sm ${
-                errors.description ? 'border-red-500' : 'border-gray-300'
-              }`}
-              {...register('description')}
-            />
-            {errors.description && (
-              <p className="mt-1 text-xs text-red-600">{errors.description.message}</p>
-            )}
-          </div>
-          
-          {/* Price */}
-          <div>
-            <label htmlFor="price" className="block text-sm font-medium text-gray-700">
-              Price ($)
-            </label>
-            <input
-              type="number"
-              id="price"
-              step="0.01"
-              min="0"
-              className={`mt-1 block w-full rounded-md shadow-sm focus:border-primary focus:ring-primary sm:text-sm ${
-                errors.price ? 'border-red-500' : 'border-gray-300'
-              }`}
-              {...register('price', { valueAsNumber: true })}
-            />
-            {errors.price && (
-              <p className="mt-1 text-xs text-red-600">{errors.price.message}</p>
-            )}
-          </div>
-          
-          {/* Category */}
-          <div>
-            <label htmlFor="category" className="block text-sm font-medium text-gray-700">
-              Category
-            </label>
-            <select
-              id="category"
-              className={`mt-1 block w-full rounded-md shadow-sm focus:border-primary focus:ring-primary sm:text-sm ${
-                errors.category ? 'border-red-500' : 'border-gray-300'
-              }`}
-              {...register('category')}
+        <div className="rounded-lg bg-white p-8 shadow-lg">
+          {window.history.length > 1 && (
+            <button
+              onClick={() => navigate(-1)}
+              className="mb-8 flex items-center gap-2 px-4 py-2 rounded-2xl bg-gradient-to-r from-[#ef6c13] to-[#f3701a] text-white font-bold shadow hover:from-[#e65c00] hover:to-[#f3701a]"
             >
-              <option value="">Select a category</option>
-              {categories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
-            {errors.category && (
-              <p className="mt-1 text-xs text-red-600">{errors.category.message}</p>
-            )}
-          </div>
+              &#8592; Back
+            </button>
+          )}
+          <h1 className="mb-6 text-3xl font-bold">Edit Listing</h1>
           
-          {/* Condition */}
-          <div>
-            <label htmlFor="condition" className="block text-sm font-medium text-gray-700">
-              Condition
-            </label>
-            <select
-              id="condition"
-              className={`mt-1 block w-full rounded-md shadow-sm focus:border-primary focus:ring-primary sm:text-sm ${
-                errors.condition ? 'border-red-500' : 'border-gray-300'
-              }`}
-              {...register('condition')}
-            >
-              <option value="New">New</option>
-              <option value="Like New">Like New</option>
-              <option value="Good">Good</option>
-              <option value="Fair">Fair</option>
-              <option value="Poor">Poor</option>
-            </select>
-            {errors.condition && (
-              <p className="mt-1 text-xs text-red-600">{errors.condition.message}</p>
-            )}
-          </div>
-          
-          {/* Location */}
-          <div>
-            <label htmlFor="location" className="block text-sm font-medium text-gray-700">
-              Location
-            </label>
-            <select
-              id="location"
-              className={`mt-1 block w-full rounded-md shadow-sm focus:border-primary focus:ring-primary sm:text-sm ${
-                errors.location ? 'border-red-500' : 'border-gray-300'
-              }`}
-              {...register('location')}
-            >
-              <option value="">Select a location</option>
-              {locations.map((location) => (
-                <option key={location} value={location}>
-                  {location}
-                </option>
-              ))}
-            </select>
-            {errors.location && (
-              <p className="mt-1 text-xs text-red-600">{errors.location.message}</p>
-            )}
-          </div>
-          
-          {/* Image Upload */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Images (Max 5)
-            </label>
-            <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6">
-              <div className="space-y-1 text-center">
-                <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                <div className="flex text-sm text-gray-600">
-                  <label
-                    htmlFor="images"
-                    className="relative cursor-pointer rounded-md bg-white font-medium text-primary hover:text-primary-dark focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2"
-                  >
-                    <span>Upload images</span>
-                    <input
-                      id="images"
-                      type="file"
-                      multiple
-                      accept="image/*"
-                      className="sr-only"
-                      onChange={handleImageUpload}
-                    />
-                  </label>
-                  <p className="pl-1">or drag and drop</p>
-                </div>
-                <p className="text-xs text-gray-500">
-                  PNG, JPG, GIF up to 5MB
-                </p>
-              </div>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            {/* Title */}
+            <div>
+              <label htmlFor="title"className="block text-sm font-medium text-gray-700">
+                Title
+              </label>
+              <input
+                type="text"
+                id="title"
+                className={`mt-1 block w-full rounded-md shadow-sm focus:border-primary focus:ring-primary sm:text-sm ${
+                  errors.title ? 'border-red-500' : 'border-gray-300'
+                }`}
+                {...register('title')}
+              />
+              {errors.title && (
+                <p className="mt-1 text-xs text-red-600">{errors.title.message}</p>
+              )}
             </div>
-            {imageError && (
-              <p className="mt-1 text-xs text-red-600">{imageError}</p>
-            )}
             
-            {/* Image Preview */}
-            {images.length > 0 && (
-              <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-                {images.map((image, index) => (
-                  <div key={index} className="relative">
-                    <img
-                      src={image}
-                      alt={`Preview ${index + 1}`}
-                      className="h-24 w-full rounded-md object-cover"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removeImage(index)}
-                      className="absolute -top-2 -right-2 rounded-full bg-red-500 p-1 text-white hover:bg-red-600"
-                    >
-                      <X className="h-4 w-4" />
-                    </button>
-                  </div>
+            {/* Description */}
+            <div>
+              <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+                Description
+              </label>
+              <textarea
+                id="description"
+                rows={4}
+                className={`mt-1 block w-full rounded-md shadow-sm focus:border-primary focus:ring-primary sm:text-sm ${
+                  errors.description ? 'border-red-500' : 'border-gray-300'
+                }`}
+                {...register('description')}
+              />
+              {errors.description && (
+                <p className="mt-1 text-xs text-red-600">{errors.description.message}</p>
+              )}
+            </div>
+            
+            {/* Price */}
+            <div>
+              <label htmlFor="price" className="block text-sm font-medium text-gray-700">
+                Price ($)
+              </label>
+              <input
+                type="number"
+                id="price"
+                step="0.01"
+                min="0"
+                className={`mt-1 block w-full rounded-md shadow-sm focus:border-primary focus:ring-primary sm:text-sm ${
+                  errors.price ? 'border-red-500' : 'border-gray-300'
+                }`}
+                {...register('price', { valueAsNumber: true })}
+              />
+              {errors.price && (
+                <p className="mt-1 text-xs text-red-600">{errors.price.message}</p>
+              )}
+            </div>
+            
+            {/* Category */}
+            <div>
+              <label htmlFor="category" className="block text-sm font-medium text-gray-700">
+                Category
+              </label>
+              <select
+                id="category"
+                className={`mt-1 block w-full rounded-md shadow-sm focus:border-primary focus:ring-primary sm:text-sm ${
+                  errors.category ? 'border-red-500' : 'border-gray-300'
+                }`}
+                {...register('category')}
+              >
+                <option value="">Select a category</option>
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
                 ))}
+              </select>
+              {errors.category && (
+                <p className="mt-1 text-xs text-red-600">{errors.category.message}</p>
+              )}
+            </div>
+            
+            {/* Condition */}
+            <div>
+              <label htmlFor="condition" className="block text-sm font-medium text-gray-700">
+                Condition
+              </label>
+              <select
+                id="condition"
+                className={`mt-1 block w-full rounded-md shadow-sm focus:border-primary focus:ring-primary sm:text-sm ${
+                  errors.condition ? 'border-red-500' : 'border-gray-300'
+                }`}
+                {...register('condition')}
+              >
+                <option value="New">New</option>
+                <option value="Like New">Like New</option>
+                <option value="Good">Good</option>
+                <option value="Fair">Fair</option>
+                <option value="Poor">Poor</option>
+              </select>
+              {errors.condition && (
+                <p className="mt-1 text-xs text-red-600">{errors.condition.message}</p>
+              )}
+            </div>
+            
+            {/* Location */}
+            <div>
+              <label htmlFor="location" className="block text-sm font-medium text-gray-700">
+                Location
+              </label>
+              <select
+                id="location"
+                className={`mt-1 block w-full rounded-md shadow-sm focus:border-primary focus:ring-primary sm:text-sm ${
+                  errors.location ? 'border-red-500' : 'border-gray-300'
+                }`}
+                {...register('location')}
+              >
+                <option value="">Select a location</option>
+                {locations.map((location) => (
+                  <option key={location} value={location}>
+                    {location}
+                  </option>
+                ))}
+              </select>
+              {errors.location && (
+                <p className="mt-1 text-xs text-red-600">{errors.location.message}</p>
+              )}
+            </div>
+            
+            {/* Image Upload */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Images (Max 5)
+              </label>
+              <div className="mt-1 flex justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pt-5 pb-6">
+                <div className="space-y-1 text-center">
+                  <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                  <div className="flex text-sm text-gray-600">
+                    <label
+                      htmlFor="images"
+                      className="relative cursor-pointer rounded-md bg-white font-medium text-primary hover:text-primary-dark focus-within:outline-none focus-within:ring-2 focus-within:ring-primary focus-within:ring-offset-2"
+                    >
+                      <span>Upload images</span>
+                      <input
+                        id="images"
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        className="sr-only"
+                        onChange={handleImageUpload}
+                      />
+                    </label>
+                    <p className="pl-1">or drag and drop</p>
+                  </div>
+                  <p className="text-xs text-gray-500">
+                    PNG, JPG, GIF up to 5MB
+                  </p>
+                </div>
               </div>
-            )}
-          </div>
-          
-          {/* Submit Button */}
-          <div className="flex justify-end">
-            <Button
-              type="submit"
-              variant="primary"
-              isLoading={isLoading}
-              className="w-full sm:w-auto"
-            >
-              Update Listing
-            </Button>
-          </div>
-        </form>
+              {imageError && (
+                <p className="mt-1 text-xs text-red-600">{imageError}</p>
+              )}
+              
+              {/* Image Preview */}
+              {images.length > 0 && (
+                <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+                  {images.map((image, index) => (
+                    <div key={index} className="relative">
+                      <img
+                        src={image}
+                        alt={`Preview ${index + 1}`}
+                        className="h-24 w-full rounded-md object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeImage(index)}
+                        className="absolute -top-2 -right-2 rounded-full bg-red-500 p-1 text-white hover:bg-red-600"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            
+            {/* Submit Button */}
+            <div className="flex justify-end">
+              <Button
+                type="submit"
+                variant="primary"
+                isLoading={isLoading}
+                className="w-full sm:w-auto"
+              >
+                Update Listing
+              </Button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

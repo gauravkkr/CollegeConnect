@@ -33,9 +33,21 @@ const io = new Server(server, {
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
 
+  // Join user room
+  socket.on('join', (userId) => {
+    if (userId) {
+      socket.join(userId);
+      console.log(`User ${userId} joined their room`);
+    }
+  });
+
   socket.on('sendMessage', (message) => {
-    // Broadcast the message to the receiver (or all clients for now)
-    io.emit('receiveMessage', message);
+    // Emit to both the receiver's and sender's room for real-time sync
+    if (message && message.receiverId && message.senderId) {
+      io.to(message.receiverId).to(message.senderId).emit('receiveMessage', message);
+    } else if (message && message.receiverId) {
+      io.to(message.receiverId).emit('receiveMessage', message);
+    }
   });
 
   socket.on('disconnect', () => {
