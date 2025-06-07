@@ -6,93 +6,89 @@ const Footer = () => {
 
   return (
     <footer className="bg-gray-900 text-white">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
-          {/* Logo and Description */}
-          <div className="col-span-1">
-            <Link to="/" className="flex items-center space-x-2">
-              <span className="text-xl font-bold">College<span className="text-accent">Connect</span></span>
+      <div className="max-w-7xl mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-10">
+          
+          {/* Branding & Social */}
+          <div className="md:col-span-1">
+            <Link to="/" className="text-xl font-bold block mb-3">
+              College<span className="text-accent">Connect</span>
             </Link>
-            <p className="mt-4 text-sm text-gray-400">
-              The premier marketplace for college students to buy, sell, and exchange items within their campus community.
+            <p className="text-sm text-gray-400 leading-relaxed">
+              The student marketplace to buy, sell, and exchange items within your campus.
             </p>
-            <div className="mt-6 flex space-x-4">
-              <a href="#" className="text-gray-400 transition-colors hover:text-white">
-                <Facebook className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-gray-400 transition-colors hover:text-white">
-                <Twitter className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-gray-400 transition-colors hover:text-white">
-                <Instagram className="h-5 w-5" />
-              </a>
+            <div className="mt-4 flex space-x-4">
+              <a href="#" aria-label="Facebook" className="text-gray-400 hover:text-white transition-colors"><Facebook className="w-5 h-5" /></a>
+              <a href="#" aria-label="Twitter" className="text-gray-400 hover:text-white transition-colors"><Twitter className="w-5 h-5" /></a>
+              <a href="#" aria-label="Instagram" className="text-gray-400 hover:text-white transition-colors"><Instagram className="w-5 h-5" /></a>
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div className="col-span-1">
-            <h3 className="mb-4 text-lg font-semibold">Quick Links</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/" className="text-gray-400 transition-colors hover:text-white">Home</Link>
-              </li>
-              <li>
-                <Link to="/listings" className="text-gray-400 transition-colors hover:text-white">Browse Listings</Link>
-              </li>
-              <li>
-                <Link to="/listings/create" className="text-gray-400 transition-colors hover:text-white">Sell an Item</Link>
-              </li>
-              <li>
-                <Link to="/dashboard" className="text-gray-400 transition-colors hover:text-white">Dashboard</Link>
-              </li>
+          {/* Navigation */}
+          <div>
+            <h3 className="text-lg font-semibold mb-3">Quick Links</h3>
+            <ul className="text-sm space-y-2">
+              <li><Link to="/" className="text-gray-400 hover:text-white transition-colors">Home</Link></li>
+              <li><Link to="/listings" className="text-gray-400 hover:text-white transition-colors">Browse Listings</Link></li>
+              <li><Link to="/listings/create" className="text-gray-400 hover:text-white transition-colors">Sell an Item</Link></li>
+              <li><Link to="/dashboard" className="text-gray-400 hover:text-white transition-colors">Dashboard</Link></li>
+              <li><Link to="/sitemap" className="text-gray-400 hover:text-white transition-colors">Sitemap</Link></li>
             </ul>
           </div>
 
-          {/* Categories */}
-          <div className="col-span-1">
-            <h3 className="mb-4 text-lg font-semibold">Categories</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/listings?category=textbooks" className="text-gray-400 transition-colors hover:text-white">Textbooks</Link>
-              </li>
-              <li>
-                <Link to="/listings?category=electronics" className="text-gray-400 transition-colors hover:text-white">Electronics</Link>
-              </li>
-              <li>
-                <Link to="/listings?category=clothing" className="text-gray-400 transition-colors hover:text-white">Clothing</Link>
-              </li>
-              <li>
-                <Link to="/listings?category=appliances" className="text-gray-400 transition-colors hover:text-white">Appliances</Link>
-              </li>
-              <li>
-                <Link to="/listings?category=notes" className="text-gray-400 transition-colors hover:text-white">Notes</Link>
-              </li>
-              <li>
-                <Link to="/listings?category=pyq" className="text-gray-400 transition-colors hover:text-white">PYQ</Link>
-              </li>
+          {/* Legal */}
+          <div>
+            <h3 className="text-lg font-semibold mb-3">Legal</h3>
+            <ul className="text-sm space-y-2">
+              <li><Link to="/privacy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</Link></li>
+              <li><Link to="/terms" className="text-gray-400 hover:text-white transition-colors">Terms of Use</Link></li>
+              <li><Link to="/about" className="text-gray-400 hover:text-white transition-colors">About Us</Link></li>
+              <li><Link to="/services" className="text-gray-400 hover:text-white transition-colors">Services</Link></li>
+              <li><Link to="/faq" className="text-gray-400 hover:text-white transition-colors">FAQ</Link></li>
             </ul>
           </div>
 
-          {/* Contact */}
-          <div className="col-span-1">
-            <h3 className="mb-4 text-lg font-semibold">Contact Us</h3>
-            <ul className="space-y-4">
+          {/* Contact Info */}
+          <div>
+            <h3 className="text-lg font-semibold mb-3">Contact</h3>
+            <ul className="text-sm space-y-4">
               <li className="flex items-start">
                 <Mail className="mr-2 mt-0.5 h-5 w-5 text-gray-400" />
-                <span className="text-gray-400">support@collegeconnect.com</span>
+                <a href="mailto:rahul@collegeconnect.com" className="text-gray-400 hover:text-white transition-colors">rahul@collegeconnect.com</a>
               </li>
               <li className="flex items-start">
                 <Phone className="mr-2 mt-0.5 h-5 w-5 text-gray-400" />
-                <span className="text-gray-400">(123) 456-7890</span>
+                <a href="tel:+918229007541" className="text-gray-400 hover:text-white transition-colors">+91 8229007541</a>
+              </li>
+              <li>
+                <a href="https://www.collegewebsite.edu" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white transition-colors">College Website</a>
+              </li>
+              <li>
+                <a href="https://studentservices.college.edu" target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white transition-colors">Student Services</a>
               </li>
             </ul>
           </div>
+
+          {/* Newsletter Signup */}
+          <div>
+            <h3 className="text-lg font-semibold mb-3">Stay Updated</h3>
+            <p className="text-sm text-gray-400 mb-4">Subscribe to our newsletter for updates and promotions.</p>
+            <form className="flex flex-col sm:flex-row sm:items-center gap-2">
+              <input
+                type="email"
+                placeholder="Your email"
+                className="w-full rounded-md px-3 py-2 text-sm text-black focus:outline-none"
+              />
+              <button type="submit" className="bg-accent text-white px-4 py-2 rounded-md text-sm hover:bg-opacity-90 transition-colors">
+                Subscribe
+              </button>
+            </form>
+          </div>
         </div>
 
-        <div className="mt-12 border-t border-gray-800 pt-8 text-center">
-          <p className="text-sm text-gray-400">
-            &copy; {currentYear} CollegeConnect. All rights reserved.
-          </p>
+        {/* Footer Bottom */}
+        <div className="mt-12 border-t border-gray-800 pt-6 text-center text-sm text-gray-500">
+          &copy; {currentYear} CollegeConnect. All rights reserved.
         </div>
       </div>
     </footer>
