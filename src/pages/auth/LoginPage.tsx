@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { LogIn } from 'lucide-react';
+import { LogIn, Send } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import Button from '../../components/ui/Button';
 
@@ -22,12 +22,17 @@ const loginSchema = z.object({
   path: ['email'],
 });
 
+const forgotPasswordSchema = z.object({
+  email: z.string().email({ message: 'Please enter a valid email address' }),
+});
+
 type LoginFormValues = z.infer<typeof loginSchema>;
+type ForgotFormValues = z.infer<typeof forgotPasswordSchema>;
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login, isLoading } = useAuth();
+  const { login, isLoading, resetPassword } = useAuth(); // ensure resetPassword is defined
   const [authError, setAuthError] = useState<string | null>(null);
   const [loginMethod, setLoginMethod] = useState<'email' | 'mobile'>('email');
 
