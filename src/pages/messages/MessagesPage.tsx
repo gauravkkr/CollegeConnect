@@ -1,9 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useAuth } from '../../hooks/useAuth';
+import { io, Socket } from 'socket.io-client';
 import { useSocket } from '../../hooks/useSocket';
 import { useParams, useNavigate } from 'react-router-dom';
 import ChatBox from '../../components/messages/ChatBox';
 import { FaPlus } from 'react-icons/fa';
+
+const SOCKET_URL = 'http://localhost:5000'; // Adjust if needed
 
 // Message type
 interface Message {
@@ -31,6 +34,7 @@ const MessagesPage: React.FC = () => {
   const [userMap, setUserMap] = useState<Record<string, UserInfo>>({});
   const [conversations, setConversations] = useState<{ listingId: string; receiverId: string; name: string }[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const socketRef = useRef<Socket | null>(null);
   const chatEndRef = useRef<HTMLDivElement | null>(null);
   const { sendMessage } = useSocket((msg) => {
     setMessages((prev) => [...prev, msg]);
@@ -105,12 +109,44 @@ const MessagesPage: React.FC = () => {
       });
   }, [listingId, token, receiverId, user, userMap]);
 
-  // Join the socket room for this conversation
+  // Setup socket connection (only once on mount)
   useEffect(() => {
-    if (!listingId || !receiverId) return;
-    // Emit join event for the listing and user ID
-    sendMessage({ type: 'join', listingId, userId: user?.id });
-  }, [listingId, receiverId, user, sendMessage]);
+    socketRef.current = io(SOCKET_URL);
+    socketRef.current.on('receiveMessage', (msg: Message) => {
+      console.log('Received message via socket:', msg);
+      if (msg.listingId === listingId && (msg.senderId === receiverId || msg.receiverId === receiverId)) {
+        // Message for the currently open chat
+        setMessages((prev) => [...prev, msg]);
+        // Fetch sender info if not present
+        if (!userMap[msg.senderId]) {
+          fetch(`/api/users/${msg.senderId}`)
+            .then(res => res.json())
+            .then(u => setUserMap(prev => ({ ...prev, [msg.senderId]: { _id: u._id, name: u.username || u.name, profileImage: u.profileImage } })));
+        }
+      } else {
+        // Message for another chat: update conversation list
+        setConversations(prev => {
+          const exists = prev.some(c => c.listingId === msg.listingId && c.receiverId === (msg.senderId === user?.id ? msg.receiverId : msg.senderId));
+          if (!exists) {
+            // Add new conversation to the list
+            return [
+              ...prev,
+              {
+                listingId: msg.listingId,
+                receiverId: msg.senderId === user?.id ? msg.receiverId : msg.senderId,
+                name: userMap[msg.senderId]?.name || userMap[msg.receiverId]?.name || 'New Chat'
+              }
+            ];
+          }
+          return prev;
+        });
+        // Optionally, show a notification or badge here
+      }
+    });
+    return () => {
+      if (socketRef.current) socketRef.current.disconnect();
+    };
+  }, [listingId, receiverId, userMap, user]);
 
   // Scroll to bottom on new message
   useEffect(() => {
