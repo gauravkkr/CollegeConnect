@@ -11,11 +11,11 @@ const ListingsPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const { listings, getListings, isLoading } = useListings();
-  
+
   useEffect(() => {
-    getListings({ category: selectedCategory, search: searchQuery });
+    getListings({ category: selectedCategory === 'All' ? '' : selectedCategory, search: searchQuery });
   }, [getListings, selectedCategory, searchQuery]);
-  
+
   const categories = [
     'All',
     'Textbooks',
@@ -25,7 +25,7 @@ const ListingsPage = () => {
     'Notes',
     'PYQ',
   ];
-  
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-100 flex flex-col py-10">
       <div className="container mx-auto px-4">
@@ -75,7 +75,7 @@ const ListingsPage = () => {
                           ? 'bg-gradient-to-r from-orange-400 to-orange-300 text-white shadow'
                           : 'hover:bg-orange-100 text-gray-700'
                       }`}
-                      onClick={() => setSelectedCategory(category === 'All' ? '' : category)}
+                      onClick={() => setSelectedCategory(category)}
                     >
                       {category}
                     </button>
@@ -98,9 +98,11 @@ const ListingsPage = () => {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {listings.map((listing) => (
-                    <ListingCard key={listing.id} listing={listing} />
-                  ))}
+                  {listings
+                    .filter(listing => !selectedCategory || selectedCategory === 'All' || listing.category === selectedCategory)
+                    .map((listing) => (
+                      <ListingCard key={listing.id} listing={listing} />
+                    ))}
                 </div>
               )}
             </div>
