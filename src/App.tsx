@@ -17,6 +17,7 @@ const CreateListingPage = lazy(() => import('./pages/listings/CreateListingPage'
 const EditListingPage = lazy(() => import('./pages/listings/EditListingPage'));
 const MessagesPage = lazy(() => import('./pages/messages/MessagesPage'));
 const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
+const ResetPasswordPage = lazy(() => import('./pages/auth/ResetPasswordPage'));
 
 function App() {
   return (
@@ -43,6 +44,7 @@ function App() {
           {/* 404 page */}
           <Route path="*" element={<NotFoundPage />} />
         </Route>
+        <Route path="reset-password" element={<ResetPasswordPage />} />
       </Routes>
     </Suspense>
   );

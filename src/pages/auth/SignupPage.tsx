@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuth } from '../../hooks/useAuth';
-import Button from '../../components/Button';
+import Button from '../../components/ui/Button';
 
 // Form validation schema
 const signupSchema = z.object({
@@ -23,6 +23,7 @@ const signupSchema = z.object({
   terms: z.boolean().refine(val => val === true, {
     message: 'You must agree to the terms and conditions',
   }),
+  mobile: z.string().min(10, { message: 'Mobile number must be at least 10 digits' }),
 }).refine(data => data.password === data.confirmPassword, {
   message: 'Passwords do not match',
   path: ['confirmPassword'],
@@ -47,13 +48,14 @@ const SignupPage = () => {
       password: '',
       confirmPassword: '',
       terms: false,
+      mobile: '',
     },
   });
 
   const onSubmit = async (data: SignupFormValues) => {
     try {
       setAuthError(null);
-      await signup(data.name, data.email, data.password);
+      await signup(data.name, data.email, data.password, data.mobile);
       navigate('/dashboard');
     } catch (error) {
       setAuthError('Signup failed. Please try again.');
@@ -160,6 +162,25 @@ const SignupPage = () => {
             />
             {errors.confirmPassword && (
               <p className="mt-1 text-xs text-red-600">{errors.confirmPassword.message}</p>
+            )}
+          </div>
+
+          {/* Mobile */}
+          <div>
+            <label htmlFor="mobile" className="block text-sm font-medium text-gray-700 mb-1">
+              Mobile Number <span className="text-red-500">*</span>
+            </label>
+            <input
+              id="mobile"
+              type="tel"
+              autoComplete="tel"
+              required
+              className={`mt-0 block w-full rounded-md bg-white text-gray-900 font-semibold shadow-sm border ${errors.mobile ? 'border-red-500' : 'border-gray-300'} focus:border-orange-700 focus:ring-orange-700 hover:border-orange-500 transition-all duration-200 sm:text-base px-4 py-3 placeholder-gray-400`}
+              placeholder="Mobile Number"
+              {...register('mobile')}
+            />
+            {errors.mobile && (
+              <p className="mt-1 text-xs text-red-600">{errors.mobile.message}</p>
             )}
           </div>
 

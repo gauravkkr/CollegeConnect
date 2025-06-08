@@ -192,6 +192,7 @@ const DashboardPage = () => {
           <aside className="w-full md:w-80 bg-white rounded-3xl shadow-xl p-10 flex flex-col items-center border-2 border-orange-100 animate-fade-in animate-slide-up">
             <Avatar src={user?.profileImage} alt={user?.name} size="xl" />
             <h2 className="mt-4 text-2xl font-bold text-gray-900">{user?.name}</h2>
+            <p className="text-gray-500 mb-2">{user?.mobile}</p>
             <p className="text-gray-500 mb-4">{user?.email}</p>
             <div className="flex gap-2 mb-6">
               <span className="rounded-full bg-primary/10 px-3 py-1 text-xs text-primary font-medium">Student</span>
