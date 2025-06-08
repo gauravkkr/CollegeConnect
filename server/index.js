@@ -59,3 +59,7 @@ const PORT = process.env.PORT || 5000;
 mongoose.connect(process.env.MONGO_URI)
   .then(() => server.listen(PORT, () => console.log(`Server running on port ${PORT}`)))
   .catch(err => console.error(err));
+
+// Make sure to set these in your .env file:
+// SMTP_USER=your_gmail_or_smtp_user
+// SMTP_PASS=your_gmail_or_smtp_password
