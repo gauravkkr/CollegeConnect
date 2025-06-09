@@ -18,12 +18,9 @@ const loginSchema = z.object({
     }),
   password: z.string().min(6, { message: 'Password must be at least 6 characters' }),
   rememberMe: z.boolean().optional(),
-<<<<<<< HEAD
 }).refine((data) => data.email || data.mobile, {
   message: 'Please enter either email or mobile number',
   path: ['email'],
-=======
->>>>>>> ebac23d5bb45d0f2f046f235d723170fc71027b7
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -33,9 +30,7 @@ const LoginPage = () => {
   const location = useLocation();
   const { login, isLoading } = useAuth();
   const [authError, setAuthError] = useState<string | null>(null);
-<<<<<<< HEAD
   const [loginMethod, setLoginMethod] = useState<'email' | 'mobile'>('email');
-=======
   const [showForgot, setShowForgot] = useState(false);
   const [forgotEmail, setForgotEmail] = useState('');
   const [forgotSent, setForgotSent] = useState(false);
@@ -46,7 +41,6 @@ const LoginPage = () => {
   const [otpError, setOtpError] = useState('');
   const [otpLoading, setOtpLoading] = useState(false);
   const otpInputRef = useRef<HTMLInputElement>(null);
->>>>>>> ebac23d5bb45d0f2f046f235d723170fc71027b7
 
   // Get the return URL from location state or default to home
   const from = location.state?.from?.pathname || '/';
@@ -65,11 +59,7 @@ const LoginPage = () => {
     },
   });
 
-<<<<<<< HEAD
   const onLoginSubmit = async (data: LoginFormValues) => {
-=======
-  const onSubmit = async (data: LoginFormValues) => {
->>>>>>> ebac23d5bb45d0f2f046f235d723170fc71027b7
     try {
       setAuthError(null);
       if (loginMethod === 'email') {
@@ -83,22 +73,24 @@ const LoginPage = () => {
     }
   };
 
-<<<<<<< HEAD
-=======
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setForgotSent(false);
+    setAuthError(null);
     try {
-      const res = await fetch('/api/auth/send-reset-link', {
+      const res = await fetch('/api/auth/request-reset', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: forgotEmail, link: 'https://your-app.com/reset-password' })
+        body: JSON.stringify({ email: forgotEmail })
       });
-      if (!res.ok) throw new Error('Failed to send reset link');
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.message || 'Failed to send reset link');
+      }
       setForgotSent(true);
     } catch (err) {
       setForgotSent(false);
-      alert('Failed to send reset link. Please try again.');
+      setAuthError(err instanceof Error ? err.message : 'Failed to send reset link. Please try again.');
     }
   };
 
@@ -142,7 +134,6 @@ const LoginPage = () => {
     }, 1000);
   };
 
->>>>>>> ebac23d5bb45d0f2f046f235d723170fc71027b7
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-white to-orange-100">
       <div className="w-full max-w-md rounded-2xl bg-white shadow-xl p-8">
@@ -164,11 +155,7 @@ const LoginPage = () => {
               </text>
             </svg>
           </div>
-<<<<<<< HEAD
-          <h2 className="mb-6 text-3xl font-bold text-gray-900">
-=======
           <h2 className="mb-6 text-center text-3xl font-bold text-gray-900">
->>>>>>> ebac23d5bb45d0f2f046f235d723170fc71027b7
             Welcome Back
           </h2>
           <p className="mb-6 text-gray-600">
@@ -182,30 +169,9 @@ const LoginPage = () => {
           </div>
         )}
 
-<<<<<<< HEAD
-        <form className="space-y-6" onSubmit={handleSubmit(onLoginSubmit)}>
-          <div className="flex justify-center gap-4 mb-6">
-            <button
-              type="button"
-              className={`px-4 py-2 rounded-lg font-semibold border transition-all ${loginMethod === 'email' ? 'bg-orange-600 text-white border-orange-600' : 'bg-white text-orange-600 border-orange-300'}`}
-              onClick={() => setLoginMethod('email')}
-            >
-              Login with Email
-            </button>
-            <button
-              type="button"
-              className={`px-4 py-2 rounded-lg font-semibold border transition-all ${loginMethod === 'mobile' ? 'bg-orange-600 text-white border-orange-600' : 'bg-white text-orange-600 border-orange-300'}`}
-              onClick={() => setLoginMethod('mobile')}
-            >
-              Login with Mobile
-            </button>
-          </div>
-          {loginMethod === 'email' && (
-=======
         {/* OTP Login Section */}
         {otpMode ? (
           <form className="space-y-6" onSubmit={otpSent ? handleOtpLogin : handleSendOtp}>
->>>>>>> ebac23d5bb45d0f2f046f235d723170fc71027b7
             <div>
               <label htmlFor="otp-email" className="block text-sm font-medium text-gray-700 mb-1">
                 Email Address <span className="text-red-500">*</span>
@@ -213,42 +179,14 @@ const LoginPage = () => {
               <input
                 id="otp-email"
                 type="email"
-<<<<<<< HEAD
-                autoComplete="email"
-                className={`mt-0 block w-full rounded-md bg-white text-gray-900 font-semibold shadow-sm border ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:border-orange-700 focus:ring-orange-700 px-4 py-3 placeholder-gray-400`}
-=======
                 required
                 className="mt-0 block w-full rounded-md bg-white text-gray-900 font-semibold shadow-sm border border-gray-300 focus:border-orange-700 focus:ring-orange-700 hover:border-orange-500 transition-all duration-200 sm:text-base px-4 py-3 placeholder-gray-400"
->>>>>>> ebac23d5bb45d0f2f046f235d723170fc71027b7
                 placeholder="Email Address"
                 value={otpEmail}
                 onChange={e => setOtpEmail(e.target.value)}
                 disabled={otpSent}
               />
             </div>
-<<<<<<< HEAD
-          )}
-          {loginMethod === 'mobile' && (
-            <div>
-              <label htmlFor="mobile" className="block text-sm font-medium text-gray-700 mb-1">
-                Mobile Number <span className="text-red-500">*</span>
-              </label>
-              <input
-                id="mobile"
-                type="tel"
-                autoComplete="tel"
-                className={`mt-0 block w-full rounded-md bg-white text-gray-900 font-semibold shadow-sm border ${errors.mobile ? 'border-red-500' : 'border-gray-300'} focus:border-orange-700 focus:ring-orange-700 px-4 py-3 placeholder-gray-400`}
-                placeholder="Mobile Number"
-                {...register('mobile')}
-              />
-              {errors.mobile && <p className="mt-1 text-xs text-red-600">{errors.mobile.message}</p>}
-            </div>
-          )}
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-              Password <span className="text-red-500">*</span>
-            </label>
-=======
             {otpSent && (
               <div>
                 <label htmlFor="otp" className="block text-sm font-medium text-gray-700 mb-1">
@@ -286,7 +224,7 @@ const LoginPage = () => {
           </form>
         ) : (
         // Password Login Form
-        <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+        <form className="space-y-6" onSubmit={handleSubmit(onLoginSubmit)}>
           {/* Email */}
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
@@ -313,33 +251,20 @@ const LoginPage = () => {
                 Password <span className="text-red-500">*</span>
               </label>
               <div className="text-sm">
-                <Link to="#" className="font-medium text-orange-700 hover:text-orange-800">
+                <button
+                  type="button"
+                  className="font-medium text-orange-700 hover:text-orange-800 focus:outline-none"
+                  onClick={() => setShowForgot(true)}
+                >
                   Forgot your password?
-                </Link>
+                </button>
               </div>
             </div>
->>>>>>> ebac23d5bb45d0f2f046f235d723170fc71027b7
             <input
               id="password"
               type="password"
               autoComplete="current-password"
               required
-<<<<<<< HEAD
-              className={`mt-0 block w-full rounded-md bg-white text-gray-900 font-semibold shadow-sm border ${errors.password ? 'border-red-500' : 'border-gray-300'} focus:border-orange-700 focus:ring-orange-700 px-4 py-3 placeholder-gray-400`}
-              placeholder="Password"
-              {...register('password')}
-            />
-            {errors.password && <p className="mt-1 text-xs text-red-600">{errors.password.message}</p>}
-          </div>
-
-          <div className="flex items-center justify-between mt-2">
-            <div></div>
-            <Link to="/reset-password" className="text-sm text-blue-600 hover:underline">
-              Forgot password?
-            </Link>
-          </div>
-
-=======
               className={`mt-0 block w-full rounded-md bg-white text-gray-900 font-semibold shadow-sm border ${errors.password ? 'border-red-500' : 'border-gray-300'} focus:border-orange-700 focus:ring-orange-700 hover:border-orange-500 transition-all duration-200 sm:text-base px-4 py-3 placeholder-gray-400`}
               placeholder="Password"
               {...register('password')}
@@ -350,33 +275,18 @@ const LoginPage = () => {
           </div>
 
           {/* Remember Me */}
->>>>>>> ebac23d5bb45d0f2f046f235d723170fc71027b7
           <div className="flex items-center">
             <input
               id="remember-me"
               type="checkbox"
-<<<<<<< HEAD
-              className="h-4 w-4 rounded border-gray-300 text-orange-700 focus:ring-orange-700"
-              {...register('rememberMe')}
-            />
-            <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-=======
               className="h-4 w-4 rounded border-gray-300 text-orange-700 focus:ring-orange-700 transition-all duration-200"
               {...register('rememberMe')}
             />
             <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900 select-none cursor-pointer">
->>>>>>> ebac23d5bb45d0f2f046f235d723170fc71027b7
               Remember me
             </label>
           </div>
 
-<<<<<<< HEAD
-          <Button type="submit" variant="primary" className="w-full text-lg font-bold rounded-2xl py-3 mt-6" isLoading={isLoading}>
-            <LogIn className="mr-2 h-5 w-5" />
-            Login
-          </Button>
-        </form>
-=======
           {/* Submit Button */}
           <div>
             <Button
@@ -416,6 +326,7 @@ const LoginPage = () => {
                   Send Reset Link
                 </Button>
                 {forgotSent && <p className="text-green-600 text-center">Reset link sent! Check your email.</p>}
+                {authError && <p className="text-red-600 text-center">{authError}</p>}
               </form>
             </div>
           </div>
@@ -432,14 +343,9 @@ const LoginPage = () => {
             </Link>
           </p>
         </div>
->>>>>>> ebac23d5bb45d0f2f046f235d723170fc71027b7
       </div>
     </div>
   );
 };
 
-<<<<<<< HEAD
 export default LoginPage;
-=======
-export default LoginPage;
->>>>>>> ebac23d5bb45d0f2f046f235d723170fc71027b7
