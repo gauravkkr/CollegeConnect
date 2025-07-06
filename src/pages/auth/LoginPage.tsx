@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { LogIn, Send } from 'lucide-react';
+import { LogIn } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import Button from '../../components/ui/Button';
 
@@ -22,17 +22,12 @@ const loginSchema = z.object({
   path: ['email'],
 });
 
-const forgotPasswordSchema = z.object({
-  email: z.string().email({ message: 'Please enter a valid email address' }),
-});
-
 type LoginFormValues = z.infer<typeof loginSchema>;
-type ForgotFormValues = z.infer<typeof forgotPasswordSchema>;
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login, isLoading, resetPassword } = useAuth(); // ensure resetPassword is defined
+  const { login, isLoading } = useAuth();
   const [authError, setAuthError] = useState<string | null>(null);
   const [loginMethod, setLoginMethod] = useState<'email' | 'mobile'>('email');
 
@@ -53,16 +48,25 @@ const LoginPage = () => {
   });
 
   const onLoginSubmit = async (data: LoginFormValues) => {
+    setAuthError(null);
     try {
-      setAuthError(null);
       if (loginMethod === 'email') {
         await login(data.email || '', data.password, '');
       } else {
         await login('', data.password, data.mobile || '');
       }
       navigate(from, { replace: true });
-    } catch (error) {
-      setAuthError('Login failed. Please check your credentials.');
+    } catch (error: any) {
+      let errorMsg = 'Login failed. Please check your credentials.';
+      if (error instanceof Error && error.message) {
+        if (error.message.toLowerCase().includes('user not found')) {
+          errorMsg = 'This user does not exist.';
+        } else if (error.message.toLowerCase().includes('invalid credentials') || error.message.toLowerCase().includes('password')) {
+          errorMsg = 'Password is incorrect.';
+        }
+      }
+      setAuthError(errorMsg);
+      alert(errorMsg);
     }
   };
 
