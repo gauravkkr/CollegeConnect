@@ -12,6 +12,7 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(cors());
 app.use(helmet());
 
+<<<<<<< Updated upstream
 // Import routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/listings', require('./routes/listings'));
@@ -28,6 +29,9 @@ const io = new Server(server, {
     methods: ['GET', 'POST']
   }
 });
+=======
+mongoose.connect('mongodb://localhost:27017/college-connect');
+>>>>>>> Stashed changes
 
 // Socket.io connection
 io.on('connection', (socket) => {
