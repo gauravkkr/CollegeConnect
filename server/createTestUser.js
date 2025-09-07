@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const User = require('./models/user');
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/CollegeConnect';
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://192.168.131.64:27017/CollegeConnect';
 
 async function run() {
   await mongoose.connect(MONGO_URI);

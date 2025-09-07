@@ -6,7 +6,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import ChatBox from '../../components/messages/ChatBox';
 import { FaPlus } from 'react-icons/fa';
 
-const SOCKET_URL = 'http://localhost:5000'; // Adjust if needed
+const SOCKET_URL = 'http://192.168.131.64:5000'; // Adjust if needed
 
 // Message type
 interface Message {
@@ -264,8 +264,8 @@ const MessagesPage: React.FC = () => {
   const details = 'Sample details';
 
   return (
-    <div className="flex justify-center items-center min-h-[80vh] bg-gradient-to-br from-orange-50 via-white to-orange-100">
-      <div className="w-full max-w-2xl rounded-2xl bg-white shadow-xl flex flex-col overflow-hidden">
+    <div className="flex flex-col md:flex-row min-h-[80vh] bg-gradient-to-br from-orange-50 via-white to-orange-100 px-2 sm:px-4 py-4 sm:py-8 max-w-3xl mx-auto">
+      <div className="w-full max-w-full md:max-w-2xl mx-auto rounded-2xl shadow-2xl bg-white/10 backdrop-blur-md flex flex-col overflow-hidden">
         {/* Header */}
         <div className="flex items-center gap-4 px-6 py-4 border-b bg-gray-50">
           <div className="w-12 h-12 rounded bg-gray-200 flex items-center justify-center overflow-hidden">

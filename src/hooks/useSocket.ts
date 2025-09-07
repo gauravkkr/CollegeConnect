@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useAuth } from './useAuth';
 
-const SOCKET_URL = 'http://localhost:5000';
+const SOCKET_URL = 'http://192.168.131.64:5000';
 
 export function useSocket(onMessage: (msg: any) => void) {
   const socketRef = useRef<Socket | null>(null);

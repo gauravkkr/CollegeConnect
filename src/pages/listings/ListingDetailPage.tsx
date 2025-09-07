@@ -30,8 +30,8 @@ const ListingDetailPage = () => {
   
   if (!currentListing) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 p-8 text-center">
+      <div className="container mx-auto px-2 sm:px-4 py-6 sm:py-8">
+        <div className="rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 p-4 sm:p-8 text-center">
           <h2 className="mb-4 text-xl font-semibold text-gray-700">Listing Not Found</h2>
           <p className="mb-6 text-gray-600">The listing you're looking for doesn't exist or has been removed.</p>
           <Link to="/listings">
@@ -54,8 +54,8 @@ const ListingDetailPage = () => {
   };
   
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="rounded-lg bg-white p-8 shadow-lg max-w-3xl mx-auto">
+    <div className="container mx-auto px-2 sm:px-4 py-6 sm:py-8 max-w-3xl">
+      <div className="rounded-lg bg-white p-4 sm:p-8 shadow-lg max-w-full sm:max-w-3xl mx-auto">
         {window.history.length > 1 && (
           <button
             onClick={() => navigate(-1)}

@@ -28,82 +28,50 @@ const ListingsPage = () => {
   
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-100 flex flex-col py-10">
-      <div className="container mx-auto px-4">
-        <div className="rounded-2xl bg-white shadow-xl p-10 mb-10 animate-fade-in animate-slide-up">
-          {window.history.length > 1 && (
-            <button
-              onClick={() => navigate(-1)}
-              className="mb-8 flex items-center gap-2 px-4 py-2 rounded-2xl bg-gradient-to-r from-[#ef6c13] to-[#f3701a] text-white font-bold shadow hover:from-[#e65c00] hover:to-[#f3701a]"
-            >
-              &#8592; Back
-            </button>
-          )}
-          <h1 className="mb-8 text-4xl font-extrabold text-gray-900">Browse Listings</h1>
-          <div className="flex flex-col gap-4 md:flex-row md:items-center mb-8">
-            {/* Search Bar */}
-            <div className="relative flex-1">
-              <input
-                type="text"
-                placeholder="Search listings..."
-                className="h-14 w-full rounded-2xl border-2 border-orange-200 bg-gray-50 pl-14 pr-4 text-lg shadow focus:border-orange-700 focus:ring-2 focus:ring-orange-200 focus:outline-none placeholder-gray-400 transition-all duration-200"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              <Search className="absolute left-5 top-4 h-6 w-6 text-gray-400" />
-            </div>
-            {/* Filter Button (Mobile) */}
-            <Button
-              variant="outline"
-              className="flex items-center md:hidden rounded-2xl border-2 border-orange-200 text-lg font-bold bg-white hover:bg-orange-50"
-              onClick={() => {/* Toggle mobile filter menu */}}
-            >
-              <Filter className="mr-2 h-5 w-5" />
-              Filter
-            </Button>
-          </div>
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
-            {/* Categories Sidebar */}
-            <div className="hidden lg:block">
-              <div className="rounded-2xl border-2 border-orange-200 bg-orange-50 p-6">
-                <h2 className="mb-4 text-xl font-bold text-gray-900">Categories</h2>
-                <div className="space-y-2">
-                  {categories.map((category) => (
-                    <button
-                      key={category}
-                      className={`w-full rounded-xl px-4 py-3 text-left text-lg font-semibold transition-colors ${
-                        selectedCategory === (category === 'All' ? '' : category)
-                          ? 'bg-gradient-to-r from-orange-400 to-orange-300 text-white shadow'
-                          : 'hover:bg-orange-100 text-gray-700'
-                      }`}
-                      onClick={() => setSelectedCategory(category === 'All' ? '' : category)}
-                    >
-                      {category}
-                    </button>
-                  ))}
-                </div>
+      <div className="container mx-auto px-2 sm:px-4 py-6 sm:py-8 max-w-5xl">
+        <h1 className="text-2xl sm:text-4xl font-bold mb-4 sm:mb-8 text-center">Browse Listings</h1>
+        <div className="grid grid-cols-1 gap-4 sm:gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {/* Categories Sidebar */}
+          <div className="hidden lg:block">
+            <div className="rounded-2xl border-2 border-orange-200 bg-orange-50 p-6">
+              <h2 className="mb-4 text-xl font-bold text-gray-900">Categories</h2>
+              <div className="space-y-2">
+                {categories.map((category) => (
+                  <button
+                    key={category}
+                    className={`w-full rounded-xl px-4 py-3 text-left text-lg font-semibold transition-colors ${
+                      selectedCategory === (category === 'All' ? '' : category)
+                        ? 'bg-gradient-to-r from-orange-400 to-orange-300 text-white shadow'
+                        : 'hover:bg-orange-100 text-gray-700'
+                    }`}
+                    onClick={() => setSelectedCategory(category === 'All' ? '' : category)}
+                  >
+                    {category}
+                  </button>
+                ))}
               </div>
             </div>
-            {/* Listings Grid */}
-            <div className="lg:col-span-3">
-              {isLoading ? (
-                <div className="flex h-64 items-center justify-center">
-                  <LoadingSpinner size="lg" />
-                </div>
-              ) : listings.length === 0 ? (
-                <div className="flex h-64 flex-col items-center justify-center rounded-2xl border-2 border-dashed border-orange-200 bg-orange-50 p-8 text-center">
-                  <p className="mb-4 text-lg text-gray-600">No listings found</p>
-                  <Link to="/listings/create">
-                    <Button variant="primary" className="text-lg px-8 py-3 rounded-2xl font-bold">Create a Listing</Button>
-                  </Link>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {listings.map((listing) => (
-                    <ListingCard key={listing.id} listing={listing} />
-                  ))}
-                </div>
-              )}
-            </div>
+          </div>
+          {/* Listings Grid */}
+          <div className="lg:col-span-3">
+            {isLoading ? (
+              <div className="flex h-64 items-center justify-center">
+                <LoadingSpinner size="lg" />
+              </div>
+            ) : listings.length === 0 ? (
+              <div className="flex h-64 flex-col items-center justify-center rounded-2xl border-2 border-dashed border-orange-200 bg-orange-50 p-8 text-center">
+                <p className="mb-4 text-lg text-gray-600">No listings found</p>
+                <Link to="/listings/create">
+                  <Button variant="primary" className="text-lg px-8 py-3 rounded-2xl font-bold">Create a Listing</Button>
+                </Link>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {listings.map((listing) => (
+                  <ListingCard key={listing.id} listing={listing} />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

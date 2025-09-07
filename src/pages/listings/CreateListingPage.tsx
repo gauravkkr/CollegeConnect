@@ -121,7 +121,7 @@ const CreateListingPage = () => {
   
   return (
     <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-white py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-2xl animate-fade-in animate-slide-up">
+      <div className="w-full max-w-2xl mx-auto animate-fade-in animate-slide-up p-4 sm:p-8">
         <div className="rounded-lg bg-white p-8 shadow-lg">
           {window.history.length > 1 && (
             <button

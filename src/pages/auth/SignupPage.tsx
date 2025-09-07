@@ -63,35 +63,35 @@ const SignupPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-white to-orange-100">
-      <div className="w-full max-w-md rounded-2xl bg-white shadow-xl p-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-white to-orange-100 px-2 sm:px-0">
+      <div className="rounded-2xl bg-white shadow-xl p-8 sm:p-10 w-full max-w-md mx-auto animate-fade-in animate-slide-up">
         {window.history.length > 1 && (
           <button
             onClick={() => navigate(-1)}
-            className="mb-6 flex items-center gap-2 px-4 py-2 rounded-2xl bg-gradient-to-r from-[#ef6c13] to-[#f3701a] text-white font-bold shadow hover:from-[#e65c00] hover:to-[#f3701a]"
+            className="mb-4 sm:mb-6 flex items-center gap-2 px-4 py-2 rounded-2xl bg-gradient-to-r from-[#ef6c13] to-[#f3701a] text-white font-bold shadow hover:from-[#e65c00] hover:to-[#f3701a]"
           >
             &#8592; Back
           </button>
         )}
         <div className="text-center">
-          <h2 className="mb-6 text-center text-3xl font-bold text-gray-900">
+          <h2 className="mb-4 sm:mb-6 text-2xl sm:text-3xl font-bold text-gray-900">
             Create Your Account
           </h2>
-          <p className="mb-6 text-gray-600">
+          <p className="mb-4 sm:mb-6 text-gray-600 text-sm sm:text-base">
             Join the campus marketplace to buy, sell, and connect with other students.
           </p>
         </div>
 
         {authError && (
-          <div className="mb-4 rounded-md bg-red-50 p-4">
-            <div className="text-sm text-red-700">{authError}</div>
+          <div className="mb-2 sm:mb-4 rounded-md bg-red-50 p-2 sm:p-4">
+            <div className="text-xs sm:text-sm text-red-700">{authError}</div>
           </div>
         )}
 
-        <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+        <form className="space-y-4 sm:space-y-6" onSubmit={handleSubmit(onSubmit)}>
           {/* Name */}
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="name" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
               Full Name <span className="text-red-500">*</span>
             </label>
             <input
@@ -99,7 +99,7 @@ const SignupPage = () => {
               type="text"
               autoComplete="name"
               required
-              className={`mt-0 block w-full rounded-md bg-white text-gray-900 font-semibold shadow-sm border ${errors.name ? 'border-red-500' : 'border-gray-300'} focus:border-orange-700 focus:ring-orange-700 hover:border-orange-500 transition-all duration-200 sm:text-base px-4 py-3 placeholder-gray-400`}
+              className={`mt-0 block w-full rounded-md bg-white text-gray-900 font-semibold shadow-sm border ${errors.name ? 'border-red-500' : 'border-gray-300'} focus:border-orange-700 focus:ring-orange-700 hover:border-orange-500 transition-all duration-200 text-xs sm:text-base px-3 sm:px-4 py-2 sm:py-3 placeholder-gray-400`}
               placeholder="Full Name"
               {...register('name')}
             />
@@ -110,7 +110,7 @@ const SignupPage = () => {
 
           {/* Email */}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="email" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
               College Email <span className="text-red-500">*</span>
             </label>
             <input
@@ -118,7 +118,7 @@ const SignupPage = () => {
               type="email"
               autoComplete="email"
               required
-              className={`mt-0 block w-full rounded-md bg-white text-gray-900 font-semibold shadow-sm border ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:border-orange-700 focus:ring-orange-700 hover:border-orange-500 transition-all duration-200 sm:text-base px-4 py-3 placeholder-gray-400`}
+              className={`mt-0 block w-full rounded-md bg-white text-gray-900 font-semibold shadow-sm border ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:border-orange-700 focus:ring-orange-700 hover:border-orange-500 transition-all duration-200 text-xs sm:text-base px-3 sm:px-4 py-2 sm:py-3 placeholder-gray-400`}
               placeholder="College Email"
               {...register('email')}
             />
@@ -129,7 +129,7 @@ const SignupPage = () => {
 
           {/* Password */}
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="password" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
               Password <span className="text-red-500">*</span>
             </label>
             <input
@@ -137,7 +137,7 @@ const SignupPage = () => {
               type="password"
               autoComplete="new-password"
               required
-              className={`mt-0 block w-full rounded-md bg-white text-gray-900 font-semibold shadow-sm border ${errors.password ? 'border-red-500' : 'border-gray-300'} focus:border-orange-700 focus:ring-orange-700 hover:border-orange-500 transition-all duration-200 sm:text-base px-4 py-3 placeholder-gray-400`}
+              className={`mt-0 block w-full rounded-md bg-white text-gray-900 font-semibold shadow-sm border ${errors.password ? 'border-red-500' : 'border-gray-300'} focus:border-orange-700 focus:ring-orange-700 hover:border-orange-500 transition-all duration-200 text-xs sm:text-base px-3 sm:px-4 py-2 sm:py-3 placeholder-gray-400`}
               placeholder="Password"
               {...register('password')}
             />
@@ -148,7 +148,7 @@ const SignupPage = () => {
 
           {/* Confirm Password */}
           <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="confirmPassword" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
               Confirm Password <span className="text-red-500">*</span>
             </label>
             <input
@@ -156,7 +156,7 @@ const SignupPage = () => {
               type="password"
               autoComplete="new-password"
               required
-              className={`mt-0 block w-full rounded-md bg-white text-gray-900 font-semibold shadow-sm border ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'} focus:border-orange-700 focus:ring-orange-700 hover:border-orange-500 transition-all duration-200 sm:text-base px-4 py-3 placeholder-gray-400`}
+              className={`mt-0 block w-full rounded-md bg-white text-gray-900 font-semibold shadow-sm border ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'} focus:border-orange-700 focus:ring-orange-700 hover:border-orange-500 transition-all duration-200 text-xs sm:text-base px-3 sm:px-4 py-2 sm:py-3 placeholder-gray-400`}
               placeholder="Confirm Password"
               {...register('confirmPassword')}
             />
@@ -167,7 +167,7 @@ const SignupPage = () => {
 
           {/* Mobile */}
           <div>
-            <label htmlFor="mobile" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="mobile" className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">
               Mobile Number <span className="text-red-500">*</span>
             </label>
             <input
@@ -175,7 +175,7 @@ const SignupPage = () => {
               type="tel"
               autoComplete="tel"
               required
-              className={`mt-0 block w-full rounded-md bg-white text-gray-900 font-semibold shadow-sm border ${errors.mobile ? 'border-red-500' : 'border-gray-300'} focus:border-orange-700 focus:ring-orange-700 hover:border-orange-500 transition-all duration-200 sm:text-base px-4 py-3 placeholder-gray-400`}
+              className={`mt-0 block w-full rounded-md bg-white text-gray-900 font-semibold shadow-sm border ${errors.mobile ? 'border-red-500' : 'border-gray-300'} focus:border-orange-700 focus:ring-orange-700 hover:border-orange-500 transition-all duration-200 text-xs sm:text-base px-3 sm:px-4 py-2 sm:py-3 placeholder-gray-400`}
               placeholder="Mobile Number"
               {...register('mobile')}
             />
@@ -192,7 +192,7 @@ const SignupPage = () => {
               className={`h-4 w-4 rounded border-gray-300 text-blue-700 focus:ring-blue-700 transition-all duration-200 ease-in-out group-hover:border-blue-600 group-hover:bg-blue-100 ${errors.terms ? 'border-red-500' : ''}`}
               {...register('terms', { required: true })}
             />
-            <label htmlFor="terms" className="ml-2 block text-sm text-gray-900 select-none cursor-pointer transition-colors duration-200">
+            <label htmlFor="terms" className="ml-2 block text-xs sm:text-sm text-gray-900 select-none cursor-pointer transition-colors duration-200">
               I agree to the{' '}
               <Link to="#" className="font-medium text-orange-700 hover:text-orange-800">
                 Terms of Service
@@ -212,7 +212,7 @@ const SignupPage = () => {
             <Button
               type="submit"
               variant="primary"
-              className="w-full text-lg font-bold rounded-2xl py-3 mt-6"
+              className="w-full text-base sm:text-lg font-bold rounded-2xl py-2 sm:py-3 mt-4 sm:mt-6"
               isLoading={isLoading}
             >
               Sign Up
@@ -220,7 +220,7 @@ const SignupPage = () => {
           </div>
         </form>
 
-        <div className="mt-6 text-center text-sm">
+        <div className="mt-4 sm:mt-6 text-center text-xs sm:text-sm">
           <p className="text-gray-600">
             Already have an account?{' '}
             <Link to="/login" className="font-medium text-primary text-orange-700 hover:underline hover:text-orange-900 transition">

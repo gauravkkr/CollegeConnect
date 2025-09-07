@@ -29,18 +29,20 @@ function App() {
           <Route path="signup" element={<SignupPage />} />
           <Route path="listings" element={<ListingsPage />} />
           <Route path="listings/:id" element={<ListingDetailPage />} />
-          
+
+          {/* Profile is public, not protected */}
+          <Route path="profile" element={<ProfilePage />} />
+
           {/* Protected routes */}
           <Route element={<AuthGuard />}>
             <Route path="dashboard" element={<DashboardPage />} />
-            <Route path="profile" element={<ProfilePage />} />
             <Route path="listings/create" element={<CreateListingPage />} />
             <Route path="listings/edit/:id" element={<EditListingPage />} />
             <Route path="messages" element={<MessagesPage />} />
             <Route path="messages/:userId" element={<MessagesPage />} />
             <Route path="messages/:listingId/:receiverId" element={<MessagesPage />} />
           </Route>
-          
+
           {/* 404 page */}
           <Route path="*" element={<NotFoundPage />} />
         </Route>

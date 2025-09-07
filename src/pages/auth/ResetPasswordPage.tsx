@@ -46,16 +46,16 @@ const ResetPasswordPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-white to-orange-100">
-      <div className="w-full max-w-md rounded-2xl bg-white shadow-xl p-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-white to-orange-100 px-2 sm:px-0">
+      <div className="rounded-2xl bg-white shadow-xl p-8 sm:p-10 w-full max-w-md mx-auto animate-fade-in animate-slide-up">
         <button
           onClick={() => navigate(-1)}
-          className="mb-6 flex items-center gap-2 px-4 py-2 rounded-2xl bg-gradient-to-r from-[#ef6c13] to-[#f3701a] text-white font-bold shadow hover:from-[#e65c00] hover:to-[#f3701a]"
+          className="mb-4 sm:mb-6 flex items-center gap-2 px-4 py-2 rounded-2xl bg-gradient-to-r from-[#ef6c13] to-[#f3701a] text-white font-bold shadow hover:from-[#e65c00] hover:to-[#f3701a]"
         >
           &#8592; Back
         </button>
         <div className="text-center">
-          <div className="flex justify-center mb-6">
+          <div className="flex justify-center mb-4 sm:mb-6">
             <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
               <circle cx="24" cy="24" r="24" fill="#D35400" />
               <text x="50%" y="56%" textAnchor="middle" fill="white" fontSize="22" fontWeight="bold" fontFamily="Arial, sans-serif" dy=".3em">
@@ -63,11 +63,11 @@ const ResetPasswordPage = () => {
               </text>
             </svg>
           </div>
-          <h2 className="mb-6 text-3xl font-bold text-gray-900">Reset Password</h2>
-          <p className="mb-6 text-gray-600">Enter your email to receive an OTP and reset your password.</p>
+          <h2 className="mb-4 sm:mb-6 text-3xl sm:text-4xl font-bold text-gray-900">Reset Password</h2>
+          <p className="mb-4 sm:mb-6 text-gray-600 text-sm sm:text-base">Enter your email to receive an OTP and reset your password.</p>
         </div>
         {step === 1 && (
-          <form onSubmit={handleRequestOtp} className="space-y-6">
+          <form onSubmit={handleRequestOtp} className="space-y-4 sm:space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email Address <span className="text-red-500">*</span></label>
               <input
@@ -81,12 +81,12 @@ const ResetPasswordPage = () => {
               />
             </div>
             <button type="submit" className="w-full bg-orange-600 text-white font-bold rounded-2xl py-3 mt-2">Send OTP</button>
-            {error && <div className="text-red-600 text-center mt-2">{error}</div>}
-            {message && <div className="text-green-600 text-center mt-2">{message}</div>}
+            {error && <div className="text-red-600 text-center mt-2 text-sm">{error}</div>}
+            {message && <div className="text-green-600 text-center mt-2 text-sm">{message}</div>}
           </form>
         )}
         {step === 2 && (
-          <form onSubmit={handleResetPassword} className="space-y-6">
+          <form onSubmit={handleResetPassword} className="space-y-4 sm:space-y-6">
             <div>
               <label htmlFor="otp" className="block text-sm font-medium text-gray-700 mb-1">OTP <span className="text-red-500">*</span></label>
               <input
@@ -112,14 +112,14 @@ const ResetPasswordPage = () => {
               />
             </div>
             <button type="submit" className="w-full bg-green-600 text-white font-bold rounded-2xl py-3 mt-2">Reset Password</button>
-            {error && <div className="text-red-600 text-center mt-2">{error}</div>}
-            {message && <div className="text-green-600 text-center mt-2">{message}</div>}
+            {error && <div className="text-red-600 text-center mt-2 text-sm">{error}</div>}
+            {message && <div className="text-green-600 text-center mt-2 text-sm">{message}</div>}
           </form>
         )}
         {step === 3 && (
           <div>
-            <div className="text-green-600 mb-4 text-center">{message}</div>
-            <button onClick={() => navigate('/login')} className="text-blue-600 underline">Go to Login</button>
+            <div className="text-green-600 mb-4 text-center text-sm sm:text-base">{message}</div>
+            <button onClick={() => navigate('/login')} className="text-blue-600 underline text-sm sm:text-base">Go to Login</button>
           </div>
         )}
       </div>

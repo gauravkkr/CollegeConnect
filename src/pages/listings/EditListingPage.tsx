@@ -66,7 +66,7 @@ const EditListingPage = () => {
   
   if (!currentListing) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-2 sm:px-4 py-6 sm:py-8">
         <div className="rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 p-8 text-center">
           <h2 className="mb-4 text-xl font-semibold text-gray-700">Listing Not Found</h2>
           <p className="mb-6 text-gray-600">The listing you're trying to edit doesn't exist or has been removed.</p>
@@ -157,8 +157,8 @@ const EditListingPage = () => {
   ];
   
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mx-auto max-w-2xl">
+    <div className="container mx-auto px-2 sm:px-4 py-6 sm:py-8 max-w-2xl">
+      <div className="mx-auto max-w-full sm:max-w-2xl">
         <div className="rounded-lg bg-white p-8 shadow-lg">
           {window.history.length > 1 && (
             <button
